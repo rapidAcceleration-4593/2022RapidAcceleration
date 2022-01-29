@@ -8,15 +8,76 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
+#include <frc/motorcontrol/MotorControllerGroup.h>
+#include <frc/XboxController.h>
+#include <frc/TimedRobot.h>
+#include <frc/drive/DifferentialDrive.h>
+#include "rev/CANSparkMax.h"
+#include <frc/PneumaticHub.h>
+#include <frc/PneumaticsModuleType.h>
+#include <frc/PneumaticsControlModule.h>
+#include <frc/PneumaticsBase.h>
+#include <frc/DoubleSolenoid.h>
+#include "ctre/Phoenix.h"
+
+static const int FLM = 1;   
+static const int RLM = 2;
+static const int FRM = 3;
+static const int RRM = 4;
+
+static const int shooterLeft = 5;
+static const int shooterRight = 6;
+
+static const int intakeMotor = 7;
+
+static const int intakeRight = 8;
+
+static const int intakeLeft = 9;
+
+static const int meterMotorRight = 10;
+static const int meterMotorLeft = 11;
+
+rev::CANSparkMax m_FLM{FLM, rev::CANSparkMax::MotorType::kBrushless};
+rev::CANSparkMax m_FRM{FRM, rev::CANSparkMax::MotorType::kBrushless};
+rev::CANSparkMax m_RLM{RLM, rev::CANSparkMax::MotorType::kBrushless};
+rev::CANSparkMax m_RRM{RRM, rev::CANSparkMax::MotorType::kBrushless};
+
+TalonSRX m_intake{intakeMotor};  // maybe need to be like CANTalonSRX or WPI_TalonSrx (need to be on CAN not PWM)
+
+VictorSPX m_meterRight{meterMotorRight};  // same as above
+VictorSPX m_meterLeft{meterMotorLeft};
+
+rev::CANSparkMax m_leftShooterMotor {shooterLeft, rev::CANSparkMax::MotorType::kBrushless};
+rev::CANSparkMax m_rightShooterMotor {shooterRight, rev::CANSparkMax::MotorType::kBrushless};
+
+frc::DoubleSolenoid m_intakeRight{intakeRight, frc::PneumaticsModuleType::REVPH, 1,2};
+frc::DoubleSolenoid m_intakeLeft{intakeLeft, frc::PneumaticsModuleType::REVPH, 3, 4};
+
+//frc::MotorControllerGroup m_rightDrive{m_RLM, m_FLM};
+//frc::MotorControllerGroup m_leftDrive{m_RRM, m_FRM};
+
+frc::DifferentialDrive m_driveTrain{m_FLM, m_FRM};
+
+frc::XboxController m_driverController{0};
+
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+
+  m_FLM.RestoreFactoryDefaults();
+  m_FRM.RestoreFactoryDefaults();
+  m_RLM.RestoreFactoryDefaults();
+  m_RRM.RestoreFactoryDefaults();
+
+  m_RRM.Follow(m_FRM);
+  m_RLM.Follow(m_FLM);
+
 }
 
 /**
  * This function is called every robot packet, no matter the mode. Use
- * this for items like diagnostics that you want ran during disabled,
+ * this for items like diagnoszzztics that you want ran during disabled,
  * autonomous, teleoperated and test.
  *
  * <p> This runs after the mode specific periodic functions, but before
@@ -58,7 +119,52 @@ void Robot::AutonomousPeriodic() {
 
 void Robot::TeleopInit() {}
 
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+
+  m_driveTrain.ArcadeDrive(m_driverController.GetRightX(),m_driverController.GetRightY());
+
+  if (m_driverController.GetAButton()){
+
+    m_leftShooterMotor.Set(1);
+    m_rightShooterMotor.Set(-1);
+
+  }
+  else if (m_driverController.GetBButton()){
+
+    m_intake.Set(ControlMode::PercentOutput, .5);
+  
+  }
+  else if (m_driverController.GetYButton()){
+
+      //could use .toggle();
+
+    m_intakeRight.Set(frc::DoubleSolenoid::Value::kForward);
+    m_intakeLeft.Set(frc::DoubleSolenoid::Value::kForward);
+
+  }
+  else if (m_driverController.GetXButton()){
+    
+    m_intakeRight.Set(frc::DoubleSolenoid::Value::kReverse);
+    m_intakeLeft.Set(frc::DoubleSolenoid::Value::kReverse);
+
+  }
+  else if (m_driverController.GetBackButton()){
+    m_meterLeft.Set(ControlMode::PercentOutput, .5);
+    m_meterRight.Set(ControlMode::PercentOutput, .5); 
+  }
+  else {
+   
+    m_leftShooterMotor.Set(0);
+    m_rightShooterMotor.Set(0);
+    m_intake.Set(ControlMode::PercentOutput, 0);
+    m_meterLeft.Set(ControlMode::PercentOutput, 0);
+    m_meterRight.Set(ControlMode::PercentOutput, 0); 
+
+  }
+
+}
+
+
 
 void Robot::DisabledInit() {}
 
