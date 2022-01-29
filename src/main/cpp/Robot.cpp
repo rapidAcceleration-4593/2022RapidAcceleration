@@ -20,41 +20,40 @@
 #include <frc/DoubleSolenoid.h>
 #include "ctre/Phoenix.h"
 
-static const int FLM = 1;   
-static const int RLM = 2;
-static const int FRM = 3;
-static const int RRM = 4;
+#include "Subsystems/constants.h"
 
-static const int shooterLeft = 5;
-static const int shooterRight = 6;
+// static const int FLM = 1;   
+// static const int RLM = 2;
+// static const int FRM = 3;
+// static const int RRM = 4;
 
-static const int intakeMotor = 7;
+// static const int shooterLeft = 5;
+// static const int shooterRight = 6;
 
-static const int intakeRight = 8;
+// static const int intakeMotor = 7;
 
-static const int intakeLeft = 9;
+// static const int intakeRight = 8;
 
-static const int meterMotorRight = 12;
-static const int meterMotorLeft = 9;
+// static const int intakeLeft = 9;
 
-rev::CANSparkMax m_FLM{FLM, rev::CANSparkMax::MotorType::kBrushless};
-rev::CANSparkMax m_FRM{FRM, rev::CANSparkMax::MotorType::kBrushless};
-rev::CANSparkMax m_RLM{RLM, rev::CANSparkMax::MotorType::kBrushless};
-rev::CANSparkMax m_RRM{RRM, rev::CANSparkMax::MotorType::kBrushless};
+// static const int meterMotorRight = 12;
+// static const int meterMotorLeft = 9;
 
-TalonSRX m_intake{intakeMotor};  // maybe need to be like CANTalonSRX or WPI_TalonSrx (need to be on CAN not PWM)
+rev::CANSparkMax m_FLM{Constants::FLM, rev::CANSparkMax::MotorType::kBrushless};
+rev::CANSparkMax m_FRM{Constants::FRM, rev::CANSparkMax::MotorType::kBrushless};
+rev::CANSparkMax m_RLM{Constants::RLM, rev::CANSparkMax::MotorType::kBrushless};
+rev::CANSparkMax m_RRM{Constants::RRM, rev::CANSparkMax::MotorType::kBrushless};
 
-VictorSPX m_meterRight{meterMotorRight};  // same as above
-VictorSPX m_meterLeft{meterMotorLeft};
+TalonSRX m_intake{Constants::intakeMotor};  // maybe need to be like CANTalonSRX or WPI_TalonSrx (need to be on CAN not PWM)
 
-rev::CANSparkMax m_leftShooterMotor {shooterLeft, rev::CANSparkMax::MotorType::kBrushless};
-rev::CANSparkMax m_rightShooterMotor {shooterRight, rev::CANSparkMax::MotorType::kBrushless};
+VictorSPX m_meterRight{Constants::meterMotorRight};  // same as above
+VictorSPX m_meterLeft{Constants::meterMotorLeft};
 
-frc::DoubleSolenoid m_intakeRight{intakeRight, frc::PneumaticsModuleType::REVPH, 1,2};
-frc::DoubleSolenoid m_intakeLeft{intakeLeft, frc::PneumaticsModuleType::REVPH, 3, 4};
+rev::CANSparkMax m_leftShooterMotor {Constants::shooterLeft, rev::CANSparkMax::MotorType::kBrushless};
+rev::CANSparkMax m_rightShooterMotor {Constants::shooterRight, rev::CANSparkMax::MotorType::kBrushless};
 
-//frc::MotorControllerGroup m_rightDrive{m_RLM, m_FLM};
-//frc::MotorControllerGroup m_leftDrive{m_RRM, m_FRM};
+frc::DoubleSolenoid m_intakeRight{Constants::intakeRight, frc::PneumaticsModuleType::REVPH, 1,2};
+frc::DoubleSolenoid m_intakeLeft{Constants::intakeLeft, frc::PneumaticsModuleType::REVPH, 3, 4};
 
 frc::DifferentialDrive m_driveTrain{m_FLM, m_FRM};
 
