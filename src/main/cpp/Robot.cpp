@@ -34,8 +34,8 @@ static const int intakeRight = 8;
 
 static const int intakeLeft = 9;
 
-static const int meterMotorRight = 10;
-static const int meterMotorLeft = 11;
+static const int meterMotorRight = 12;
+static const int meterMotorLeft = 9;
 
 rev::CANSparkMax m_FLM{FLM, rev::CANSparkMax::MotorType::kBrushless};
 rev::CANSparkMax m_FRM{FRM, rev::CANSparkMax::MotorType::kBrushless};
@@ -125,16 +125,27 @@ void Robot::TeleopPeriodic() {
 
   if (m_driverController.GetAButton()){
 
-    m_leftShooterMotor.Set(1);
-    m_rightShooterMotor.Set(-1);
+    m_leftShooterMotor.Set(-.4593);
+    m_rightShooterMotor.Set(.4593);
 
   }
-  else if (m_driverController.GetBButton()){
+  else
+  {
+    m_leftShooterMotor.Set(0);
+    m_rightShooterMotor.Set(0);
+  }
+
+  if (m_driverController.GetBButton()){
 
     m_intake.Set(ControlMode::PercentOutput, .5);
   
   }
-  else if (m_driverController.GetYButton()){
+  else
+  {
+    m_intake.Set(ControlMode::PercentOutput, 0);
+  }
+
+  if (m_driverController.GetYButton()){
 
       //could use .toggle();
 
@@ -142,24 +153,20 @@ void Robot::TeleopPeriodic() {
     m_intakeLeft.Set(frc::DoubleSolenoid::Value::kForward);
 
   }
-  else if (m_driverController.GetXButton()){
-    
+  if (m_driverController.GetXButton()){  
     m_intakeRight.Set(frc::DoubleSolenoid::Value::kReverse);
     m_intakeLeft.Set(frc::DoubleSolenoid::Value::kReverse);
 
   }
-  else if (m_driverController.GetBackButton()){
-    m_meterLeft.Set(ControlMode::PercentOutput, .5);
-    m_meterRight.Set(ControlMode::PercentOutput, .5); 
+
+  if (m_driverController.GetBackButton()){
+    m_meterLeft.Set(ControlMode::PercentOutput, -.118);
+    m_meterRight.Set(ControlMode::PercentOutput, -.118); 
   }
-  else {
-   
-    m_leftShooterMotor.Set(0);
-    m_rightShooterMotor.Set(0);
-    m_intake.Set(ControlMode::PercentOutput, 0);
+  else 
+  {
     m_meterLeft.Set(ControlMode::PercentOutput, 0);
     m_meterRight.Set(ControlMode::PercentOutput, 0); 
-
   }
 
 }
