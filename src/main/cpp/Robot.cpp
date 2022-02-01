@@ -22,6 +22,8 @@
 
 #include "Subsystems/constants.h"
 
+#include <iostream>
+
 // static const int FLM = 1;   
 // static const int RLM = 2;
 // static const int FRM = 3;
@@ -52,8 +54,8 @@ VictorSPX m_meterLeft{Constants::meterMotorLeft};
 rev::CANSparkMax m_leftShooterMotor {Constants::shooterLeft, rev::CANSparkMax::MotorType::kBrushless};
 rev::CANSparkMax m_rightShooterMotor {Constants::shooterRight, rev::CANSparkMax::MotorType::kBrushless};
 
-frc::DoubleSolenoid m_intakeRight{Constants::intakeRight, frc::PneumaticsModuleType::REVPH, 1,2};
-frc::DoubleSolenoid m_intakeLeft{Constants::intakeLeft, frc::PneumaticsModuleType::REVPH, 3, 4};
+frc::DoubleSolenoid m_intakeRight{Constants::PH, frc::PneumaticsModuleType::REVPH, Constants::intakeRightForward, Constants::intakeRightBackward};
+frc::DoubleSolenoid m_intakeLeft{Constants::PH, frc::PneumaticsModuleType::REVPH, Constants::intakeLeftForward, Constants::intakeLeftBackward};
 
 frc::DifferentialDrive m_driveTrain{m_FLM, m_FRM};
 
@@ -136,7 +138,7 @@ void Robot::TeleopPeriodic() {
 
   if (m_driverController.GetBButton()){
 
-    m_intake.Set(ControlMode::PercentOutput, .5);
+    m_intake.Set(ControlMode::PercentOutput, .930);
   
   }
   else
@@ -151,16 +153,18 @@ void Robot::TeleopPeriodic() {
     m_intakeRight.Set(frc::DoubleSolenoid::Value::kForward);
     m_intakeLeft.Set(frc::DoubleSolenoid::Value::kForward);
 
+    std::cout << "intake forward \n";
   }
   if (m_driverController.GetXButton()){  
     m_intakeRight.Set(frc::DoubleSolenoid::Value::kReverse);
     m_intakeLeft.Set(frc::DoubleSolenoid::Value::kReverse);
 
+    std::cout << "intake reverse \n";
   }
 
   if (m_driverController.GetBackButton()){
-    m_meterLeft.Set(ControlMode::PercentOutput, -.118);
-    m_meterRight.Set(ControlMode::PercentOutput, -.118); 
+    m_meterLeft.Set(ControlMode::PercentOutput, -.254);
+    m_meterRight.Set(ControlMode::PercentOutput, -.148); 
   }
   else 
   {
