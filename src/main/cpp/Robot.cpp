@@ -54,8 +54,8 @@ VictorSPX m_meterLeft{Constants::meterMotorLeft};
 rev::CANSparkMax m_leftShooterMotor {Constants::shooterLeft, rev::CANSparkMax::MotorType::kBrushless};
 rev::CANSparkMax m_rightShooterMotor {Constants::shooterRight, rev::CANSparkMax::MotorType::kBrushless};
 
-frc::DoubleSolenoid m_intakeRight{Constants::PH, frc::PneumaticsModuleType::REVPH, Constants::intakeRightForward, Constants::intakeRightBackward};
-frc::DoubleSolenoid m_intakeLeft{Constants::PH, frc::PneumaticsModuleType::REVPH, Constants::intakeLeftForward, Constants::intakeLeftBackward};
+frc::DoubleSolenoid m_intakePneumatics{Constants::PH, frc::PneumaticsModuleType::REVPH, Constants::intakeForward, Constants::intakeBackward};
+//frc::DoubleSolenoid m_intakeLeft{Constants::PH, frc::PneumaticsModuleType::REVPH, Constants::intakeLeftForward, Constants::intakeLeftBackward};
 
 frc::DifferentialDrive m_driveTrain{m_FLM, m_FRM};
 
@@ -71,8 +71,12 @@ void Robot::RobotInit() {
   m_RLM.RestoreFactoryDefaults();
   m_RRM.RestoreFactoryDefaults();
 
-  m_RRM.Follow(m_FRM);
-  m_RLM.Follow(m_FLM);
+  m_FLM.SetInverted(true);
+
+ m_RRM.Follow(m_FRM);
+ m_RLM.Follow(m_FLM);
+
+  
 
 }
 
@@ -122,7 +126,9 @@ void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {
 
-  m_driveTrain.ArcadeDrive(m_driverController.GetRightX(),m_driverController.GetRightY());
+// possible - on the drive train
+
+  m_driveTrain.TankDrive(m_driverController.GetRightY(),m_driverController.GetLeftY                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ());
 
   if (m_driverController.GetAButton()){
 
@@ -149,15 +155,17 @@ void Robot::TeleopPeriodic() {
   if (m_driverController.GetYButton()){
 
       //could use .toggle();
-
-    m_intakeRight.Set(frc::DoubleSolenoid::Value::kForward);
-    m_intakeLeft.Set(frc::DoubleSolenoid::Value::kForward);
+      //m_RLM.Set(1);
+      //m_FLM.Set(1);
+    m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kForward);
+    //m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kForward);
 
     std::cout << "intake forward \n";
   }
+
   if (m_driverController.GetXButton()){  
-    m_intakeRight.Set(frc::DoubleSolenoid::Value::kReverse);
-    m_intakeLeft.Set(frc::DoubleSolenoid::Value::kReverse);
+    m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kReverse);
+    //m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kReverse);
 
     std::cout << "intake reverse \n";
   }
