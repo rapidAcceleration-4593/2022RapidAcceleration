@@ -24,22 +24,6 @@
 
 #include <iostream>
 
-// static const int FLM = 1;   
-// static const int RLM = 2;
-// static const int FRM = 3;
-// static const int RRM = 4;
-
-// static const int shooterLeft = 5;
-// static const int shooterRight = 6;
-
-// static const int intakeMotor = 7;
-
-// static const int intakeRight = 8;
-
-// static const int intakeLeft = 9;
-
-// static const int meterMotorRight = 12;
-// static const int meterMotorLeft = 9;
 
 rev::CANSparkMax m_FLM{Constants::FLM, rev::CANSparkMax::MotorType::kBrushless};
 rev::CANSparkMax m_FRM{Constants::FRM, rev::CANSparkMax::MotorType::kBrushless};
@@ -60,6 +44,7 @@ frc::DoubleSolenoid m_intakePneumatics{Constants::PH, frc::PneumaticsModuleType:
 frc::DifferentialDrive m_driveTrain{m_FLM, m_FRM};
 
 frc::XboxController m_driverController{0};
+frc::XboxController m_auxController{1};
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
@@ -128,31 +113,40 @@ void Robot::TeleopPeriodic() {
 
 // possible - on the drive train
 
-  m_driveTrain.TankDrive(m_driverController.GetRightY(),m_driverController.GetLeftY                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ());
+  m_driveTrain.ArcadeDrive(m_driverController.GetLeftY()*.75, -m_driverController.GetRightX()*.75);
 
-  if (m_driverController.GetAButton()){
+  if (m_auxController.GetAButton()){
 
-    m_leftShooterMotor.Set(-.4593);
-    m_rightShooterMotor.Set(.4593);
+    m_leftShooterMotor.Set(-.5172);
+    m_rightShooterMotor.Set(.5172);
 
+  }
+  else if (m_auxController.GetYButton()) {
+   
+    m_leftShooterMotor.Set(.118);
+    m_rightShooterMotor.Set(-.118);
+  
   }
   else
   {
     m_leftShooterMotor.Set(0);
     m_rightShooterMotor.Set(0);
   }
-
-  if (m_driverController.GetBButton()){
+  
+  if (m_auxController.GetBButton()){
 
     m_intake.Set(ControlMode::PercentOutput, .930);
   
+  }
+  else if (m_auxController.GetXButton()){
+    m_intake.Set(ControlMode::PercentOutput, -.876);
   }
   else
   {
     m_intake.Set(ControlMode::PercentOutput, 0);
   }
 
-  if (m_driverController.GetYButton()){
+  if (m_auxController.GetRightBumper()){
 
       //could use .toggle();
       //m_RLM.Set(1);
@@ -163,14 +157,14 @@ void Robot::TeleopPeriodic() {
     std::cout << "intake forward \n";
   }
 
-  if (m_driverController.GetXButton()){  
+  if (m_auxController.GetLeftBumper()){  
     m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kReverse);
     //m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kReverse);
 
     std::cout << "intake reverse \n";
   }
 
-  if (m_driverController.GetBackButton()){
+  if (m_auxController.GetBackButton()){
     m_meterLeft.Set(ControlMode::PercentOutput, -.254);
     m_meterRight.Set(ControlMode::PercentOutput, -.148); 
   }
