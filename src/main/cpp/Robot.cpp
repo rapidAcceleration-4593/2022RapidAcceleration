@@ -21,14 +21,10 @@
 #include "ctre/Phoenix.h"
 
 #include "Subsystems/constants.h"
+#include "Subsystems/DriveTrain.h"
 
 #include <iostream>
 
-
-rev::CANSparkMax m_FLM{Constants::FLM, rev::CANSparkMax::MotorType::kBrushless};
-rev::CANSparkMax m_FRM{Constants::FRM, rev::CANSparkMax::MotorType::kBrushless};
-rev::CANSparkMax m_RLM{Constants::RLM, rev::CANSparkMax::MotorType::kBrushless};
-rev::CANSparkMax m_RRM{Constants::RRM, rev::CANSparkMax::MotorType::kBrushless};
 
 TalonSRX m_intake{Constants::intakeMotor};  // maybe need to be like CANTalonSRX or WPI_TalonSrx (need to be on CAN not PWM)
 
@@ -41,25 +37,16 @@ rev::CANSparkMax m_rightShooterMotor {Constants::shooterRight, rev::CANSparkMax:
 frc::DoubleSolenoid m_intakePneumatics{Constants::PH, frc::PneumaticsModuleType::REVPH, Constants::intakeForward, Constants::intakeBackward};
 //frc::DoubleSolenoid m_intakeLeft{Constants::PH, frc::PneumaticsModuleType::REVPH, Constants::intakeLeftForward, Constants::intakeLeftBackward};
 
-frc::DifferentialDrive m_driveTrain{m_FLM, m_FRM};
-
 frc::XboxController m_driverController{0};
 frc::XboxController m_auxController{1};
+
+DriveTrain m_driveTrain;
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
-  m_FLM.RestoreFactoryDefaults();
-  m_FRM.RestoreFactoryDefaults();
-  m_RLM.RestoreFactoryDefaults();
-  m_RRM.RestoreFactoryDefaults();
-
-  m_FLM.SetInverted(true);
-
- m_RRM.Follow(m_FRM);
- m_RLM.Follow(m_FLM);
 
   
 
@@ -112,8 +99,7 @@ void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic() {
 
 // possible - on the drive train
-
-  m_driveTrain.ArcadeDrive(m_driverController.GetLeftY()*.75, -m_driverController.GetRightX()*.75);
+  m_driveTrain.drive(m_driverController.GetLeftY()*.75, -m_driverController.GetRightX()*.75);
 
   if (m_auxController.GetAButton()){
 
