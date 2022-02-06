@@ -1,10 +1,12 @@
+#pragma once
+
 class Constants
 {
     public:
-        static const int FLMID = 2;   
-        static const int RLMID = 1;
-        static const int FRMID = 4;
-        static const int RRMID = 3;
+        static const int FLM = 2;   
+        static const int RLM = 1;
+        static const int FRM = 4;
+        static const int RRM = 3;
 
         static const int shooterLeft = 5;
         static const int shooterRight = 6;

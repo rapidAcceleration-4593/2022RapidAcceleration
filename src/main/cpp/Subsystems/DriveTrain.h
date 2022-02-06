@@ -1,6 +1,8 @@
+#pragma once
+
 #include <frc/drive/DifferentialDrive.h>
 #include "rev/CANSparkMax.h"
-// #include "constants.h"
+#include "constants.h"
 
 class DriveTrain {
 
@@ -8,10 +10,10 @@ class DriveTrain {
         DriveTrain();
         ~DriveTrain();
 
-        rev::CANSparkMax m_FLM{2, rev::CANSparkMax::MotorType::kBrushless};
-        rev::CANSparkMax m_FRM{4, rev::CANSparkMax::MotorType::kBrushless};
-        rev::CANSparkMax m_RLM{1, rev::CANSparkMax::MotorType::kBrushless};
-        rev::CANSparkMax m_RRM{3, rev::CANSparkMax::MotorType::kBrushless};
+        rev::CANSparkMax m_FLM{Constants::FLM, rev::CANSparkMax::MotorType::kBrushless};
+        rev::CANSparkMax m_FRM{Constants::FRM, rev::CANSparkMax::MotorType::kBrushless};
+        rev::CANSparkMax m_RLM{Constants::RLM, rev::CANSparkMax::MotorType::kBrushless};
+        rev::CANSparkMax m_RRM{Constants::RRM, rev::CANSparkMax::MotorType::kBrushless};
 
         frc::DifferentialDrive m_diffDrive{m_FLM, m_FRM};
 
