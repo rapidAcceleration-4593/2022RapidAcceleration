@@ -17,9 +17,17 @@ class Constants
 
         static const int intakeForward = 0;
         static const int intakeBackward = 1;
-        //static const int intakeLeftForward = 3;
-        //static const int intakeLeftBackward = 4;
 
         static const int meterMotorRight = 12;
         static const int meterMotorLeft = 9;
+
+        static const int leftP = 0.1058;
+        static const int leftI = 0;
+        static const int leftD = 0;
+        static const int leftFF = .000015;
+        
+        static const int rightP = 0.12146;
+        static const int rightI = 0;
+        static const int rightD = 0;
+        static const int rightFF = .000015;
 };

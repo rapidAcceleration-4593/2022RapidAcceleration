@@ -99,7 +99,8 @@ void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic() {
 
 // possible - on the drive train
-  m_driveTrain.drive(m_driverController.GetLeftY()*.75, -m_driverController.GetRightX()*.75);
+// .75
+  m_driveTrain.drive(m_driverController.GetLeftY(), -m_driverController.GetRightX());
 
   if (m_auxController.GetAButton()){
 

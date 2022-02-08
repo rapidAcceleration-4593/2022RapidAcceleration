@@ -20,10 +20,17 @@ class DriveTrain {
 
         void drive(double a1, double a2);
 
+        rev::SparkMaxPIDController m_FLMPID = m_FLM.GetPIDController();
+        rev::SparkMaxPIDController m_RLMMPID = m_RLM.GetPIDController();
+        rev::SparkMaxPIDController m_FRMPID = m_FRM.GetPIDController();
+        rev::SparkMaxPIDController m_RRMPID = m_RRM.GetPIDController();
 
+        rev::SparkMaxRelativeEncoder m_FLMEncoder = m_FLM.GetEncoder();
+        rev::SparkMaxRelativeEncoder m_RLMEncoder = m_RLM.GetEncoder();
+        rev::SparkMaxRelativeEncoder m_FRMEncoder = m_FRM.GetEncoder();
+        rev::SparkMaxRelativeEncoder m_RRMEncoder = m_RRM.GetEncoder();
 
-
-
+        
 
 
 

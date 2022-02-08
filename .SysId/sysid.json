@@ -1,0 +1,11 @@
+{
+  "SysId": {
+    "Analysis Type": "Drivetrain",
+    "AnalyzerJSONLocation": "C:\\Users\\FIRST_Brogramming\\Desktop\\Sir Lance-a-bot\\2022\\Characterization2022\\sysid_data20220207-201434.json",
+    "NetworkTables Settings": {
+      "serverTeam": "4593"
+    },
+    "mode": "Client",
+    "serverTeam": "4593"
+  }
+}
