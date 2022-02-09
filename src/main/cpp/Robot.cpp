@@ -100,12 +100,12 @@ void Robot::TeleopPeriodic() {
 
 // possible - on the drive train
 // .75
-  m_driveTrain.drive(m_driverController.GetLeftY(), -m_driverController.GetRightX());
+  m_driveTrain.drive(m_driverController.GetLeftY()*.75, -m_driverController.GetRightX()*.75);
 
   if (m_auxController.GetAButton()){
 
-    m_leftShooterMotor.Set(-.5172);
-    m_rightShooterMotor.Set(.5172);
+    m_leftShooterMotor.Set(-.4593);
+    m_rightShooterMotor.Set(.4593);
 
   }
   else if (m_auxController.GetYButton()) {
