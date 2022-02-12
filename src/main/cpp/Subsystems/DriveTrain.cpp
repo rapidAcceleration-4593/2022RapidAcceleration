@@ -32,6 +32,8 @@ DriveTrain::DriveTrain()
     m_RRMPID.SetD(Constants::rightD);        
     m_RRMPID.SetFF(Constants::rightFF);
 
+
+
 }
 
 DriveTrain::~DriveTrain()
@@ -43,3 +45,24 @@ void DriveTrain::drive(double a1, double a2)
 {
     m_diffDrive.ArcadeDrive(a1, a2);
 }
+
+double DriveTrain::getLeftEncoderValue(){
+    //std::cout << m_FLMEncoder.GetPosition() << std::endl;
+    return m_FLMEncoder.GetPosition();
+}
+
+double DriveTrain::getRightEncoderValue(){
+    //std::cout << m_FRMEncoder.GetPosition() << std::endl;
+    return m_FRMEncoder.GetPosition();
+}
+
+void DriveTrain::resetEncoder(){
+    m_FLMEncoder.SetPosition(0);
+    m_FRMEncoder.SetPosition(0);
+}
+
+double DriveTrain::getAverageEncoder()
+{
+    return (m_FLMEncoder.GetPosition() + m_FRMEncoder.GetPosition()) / 2;
+}
+

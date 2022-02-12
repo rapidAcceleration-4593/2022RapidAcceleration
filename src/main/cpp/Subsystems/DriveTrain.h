@@ -3,6 +3,7 @@
 #include <frc/drive/DifferentialDrive.h>
 #include "rev/CANSparkMax.h"
 #include "constants.h"
+#include <iostream>
 
 class DriveTrain {
 
@@ -19,6 +20,11 @@ class DriveTrain {
 
 
         void drive(double a1, double a2);
+
+        double getLeftEncoderValue();
+        double getRightEncoderValue();
+        void resetEncoder();
+        double getAverageEncoder();
 
         rev::SparkMaxPIDController m_FLMPID = m_FLM.GetPIDController();
         rev::SparkMaxPIDController m_RLMPID = m_RLM.GetPIDController();

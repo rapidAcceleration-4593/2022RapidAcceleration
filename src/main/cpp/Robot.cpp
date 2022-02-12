@@ -34,6 +34,8 @@ VictorSPX m_meterLeft{Constants::meterMotorLeft};
 rev::CANSparkMax m_leftShooterMotor {Constants::shooterLeft, rev::CANSparkMax::MotorType::kBrushless};
 rev::CANSparkMax m_rightShooterMotor {Constants::shooterRight, rev::CANSparkMax::MotorType::kBrushless};
 
+rev::SparkMaxRelativeEncoder m_shooterEncoder = m_leftShooterMotor.GetEncoder();
+
 frc::DoubleSolenoid m_intakePneumatics{Constants::PH, frc::PneumaticsModuleType::REVPH, Constants::intakeForward, Constants::intakeBackward};
 //frc::DoubleSolenoid m_intakeLeft{Constants::PH, frc::PneumaticsModuleType::REVPH, Constants::intakeLeftForward, Constants::intakeLeftBackward};
 
@@ -42,12 +44,15 @@ frc::XboxController m_auxController{1};
 
 DriveTrain m_driveTrain;
 
+bool hasShot = false;
+bool hasDroveBack = false;
+
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
-
+m_driveTrain.resetEncoder();
   
 
 }
@@ -84,6 +89,9 @@ void Robot::AutonomousInit() {
   } else {
     // Default Auto goes here
   }
+
+  m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kForward);
+
 }
 
 void Robot::AutonomousPeriodic() {
@@ -91,6 +99,42 @@ void Robot::AutonomousPeriodic() {
     // Custom Auto goes here
   } else {
     // Default Auto goes here
+    if (hasShot == false){
+    m_leftShooterMotor.Set(-.5172);
+    m_rightShooterMotor.Set(.5172);
+    }
+
+
+    if(abs(m_shooterEncoder.GetVelocity()) > 2750 && hasShot == false)
+    {
+      m_meterLeft.Set(ControlMode::PercentOutput, -.4593);
+      m_meterRight.Set(ControlMode::PercentOutput, -.4539);
+      m_intake.Set(ControlMode::PercentOutput, .930);
+      m_leftShooterMotor.Set(-.5172);
+      m_rightShooterMotor.Set(.5172);
+      hasShot = true;
+    }
+
+    if(abs(m_driveTrain.getAverageEncoder()) < 69 && hasShot == true)
+    {
+      m_driveTrain.drive(.25, 0);
+     // m_leftShooterMotor.Set(0);
+      //m_rightShooterMotor.Set(0);
+      hasDroveBack = true;
+    }
+    else if(abs(m_driveTrain.getAverageEncoder() > 69))
+    {
+      m_driveTrain.drive(0, 0);
+      m_leftShooterMotor.Set(0);
+      m_rightShooterMotor.Set(0);
+      m_meterLeft.Set(ControlMode::PercentOutput, 0);
+      m_meterRight.Set(ControlMode::PercentOutput, 0);
+      m_intake.Set(ControlMode::PercentOutput, 0);
+      m_leftShooterMotor.Set(0);
+
+      m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kReverse);
+    }
+    
   }
 }
 
@@ -98,15 +142,19 @@ void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {
 
+m_driveTrain.getRightEncoderValue();
+m_driveTrain.getLeftEncoderValue();
+
 // possible - on the drive train
 // .75
-  m_driveTrain.drive(m_driverController.GetLeftY()*.75, -m_driverController.GetRightX()*.75);
+  m_driveTrain.drive(.75 * m_driverController.GetLeftY(), -.75 * m_driverController.GetRightX());
 
   if (m_auxController.GetAButton()){
 
     m_leftShooterMotor.Set(-.4593);
     m_rightShooterMotor.Set(.4593);
 
+    std::cout << m_shooterEncoder.GetVelocity() << std::endl;
   }
   else if (m_auxController.GetYButton()) {
    
