@@ -22,27 +22,25 @@
 
 #include "Subsystems/constants.h"
 #include "Subsystems/DriveTrain.h"
+#include "Subsystems/shooter.h"
+#include "Subsystems/climber.h"
+#include "Subsystems/intake.h"
 
 #include <iostream>
 
 
-TalonSRX m_intake{Constants::intakeMotor};  // maybe need to be like CANTalonSRX or WPI_TalonSrx (need to be on CAN not PWM)
+  // maybe need to be like CANTalonSRX or WPI_TalonSrx (need to be on CAN not PWM)
 
 VictorSPX m_meterRight{Constants::meterMotorRight};  // same as above
 VictorSPX m_meterLeft{Constants::meterMotorLeft};
-
-rev::CANSparkMax m_leftShooterMotor {Constants::shooterLeft, rev::CANSparkMax::MotorType::kBrushless};
-rev::CANSparkMax m_rightShooterMotor {Constants::shooterRight, rev::CANSparkMax::MotorType::kBrushless};
-
-rev::SparkMaxRelativeEncoder m_shooterEncoder = m_leftShooterMotor.GetEncoder();
-
-frc::DoubleSolenoid m_intakePneumatics{Constants::PH, frc::PneumaticsModuleType::REVPH, Constants::intakeForward, Constants::intakeBackward};
-//frc::DoubleSolenoid m_intakeLeft{Constants::PH, frc::PneumaticsModuleType::REVPH, Constants::intakeLeftForward, Constants::intakeLeftBackward};
 
 frc::XboxController m_driverController{0};
 frc::XboxController m_auxController{1};
 
 DriveTrain m_driveTrain;
+shooter m_shooter;
+intake m_intake;
+
 
 bool hasShot = false;
 bool hasDroveBack = false;
@@ -90,7 +88,8 @@ void Robot::AutonomousInit() {
     // Default Auto goes here
   }
 
-  m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kForward);
+  m_intake.intakePneumaticIn();
+  
 
 }
 
@@ -100,18 +99,16 @@ void Robot::AutonomousPeriodic() {
   } else {
     // Default Auto goes here
     if (hasShot == false){
-    m_leftShooterMotor.Set(-.5172);
-    m_rightShooterMotor.Set(.5172);
+    m_shooter.shoot(.5172);
     }
 
 
-    if(abs(m_shooterEncoder.GetVelocity()) > 2750 && hasShot == false)
+    if(abs(m_shooter.getShooterSpeed()) > 2750 && hasShot == false)
     {
       m_meterLeft.Set(ControlMode::PercentOutput, -.4593);
       m_meterRight.Set(ControlMode::PercentOutput, -.4539);
-      m_intake.Set(ControlMode::PercentOutput, .930);
-      m_leftShooterMotor.Set(-.5172);
-      m_rightShooterMotor.Set(.5172);
+      m_intake.intakeSpinny(.930);
+      m_shooter.shoot(.5172);
       hasShot = true;
     }
 
@@ -125,14 +122,12 @@ void Robot::AutonomousPeriodic() {
     else if(abs(m_driveTrain.getAverageEncoder() > 69))
     {
       m_driveTrain.drive(0, 0);
-      m_leftShooterMotor.Set(0);
-      m_rightShooterMotor.Set(0);
+      m_shooter.shoot(0);
       m_meterLeft.Set(ControlMode::PercentOutput, 0);
       m_meterRight.Set(ControlMode::PercentOutput, 0);
-      m_intake.Set(ControlMode::PercentOutput, 0);
-      m_leftShooterMotor.Set(0);
+      m_intake.intakeSpinny(0);
 
-      m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kReverse);
+      m_intake.intakePneumaticOut();
     }
     
   }
@@ -151,34 +146,31 @@ m_driveTrain.getLeftEncoderValue();
 
   if (m_auxController.GetAButton()){
 
-    m_leftShooterMotor.Set(-.4593);
-    m_rightShooterMotor.Set(.4593);
+    m_shooter.shoot(.4593);
 
-    std::cout << m_shooterEncoder.GetVelocity() << std::endl;
+    //std::cout << m_shooterEncoder.GetVelocity() << std::endl;
   }
   else if (m_auxController.GetYButton()) {
    
-    m_leftShooterMotor.Set(.118);
-    m_rightShooterMotor.Set(-.118);
+    m_shooter.shoot(-.118);
   
   }
   else
   {
-    m_leftShooterMotor.Set(0);
-    m_rightShooterMotor.Set(0);
+   m_shooter.shoot(0);
   }
   
   if (m_auxController.GetBButton()){
 
-    m_intake.Set(ControlMode::PercentOutput, .930);
+    m_intake.intakeSpinny(.930);
   
   }
   else if (m_auxController.GetXButton()){
-    m_intake.Set(ControlMode::PercentOutput, -.876);
+    m_intake.intakeSpinny(-.876);
   }
   else
   {
-    m_intake.Set(ControlMode::PercentOutput, 0);
+    m_intake.intakeSpinny(0);
   }
 
   if (m_auxController.GetRightBumper()){
@@ -186,14 +178,14 @@ m_driveTrain.getLeftEncoderValue();
       //could use .toggle();
       //m_RLM.Set(1);
       //m_FLM.Set(1);
-    m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kForward);
+    m_intake.intakePneumaticOut();
     //m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kForward);
 
     std::cout << "intake forward \n";
   }
 
   if (m_auxController.GetLeftBumper()){  
-    m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kReverse);
+    m_intake.intakePneumaticOut();
     //m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kReverse);
 
     std::cout << "intake reverse \n";
