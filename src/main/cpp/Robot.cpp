@@ -28,19 +28,13 @@
 
 #include <iostream>
 
-
-  // maybe need to be like CANTalonSRX or WPI_TalonSrx (need to be on CAN not PWM)
-
-VictorSPX m_meterRight{Constants::meterMotorRight};  // same as above
-VictorSPX m_meterLeft{Constants::meterMotorLeft};
-
 frc::XboxController m_driverController{0};
 frc::XboxController m_auxController{1};
 
 DriveTrain m_driveTrain;
 shooter m_shooter;
 intake m_intake;
-
+climber m_climber;
 
 bool hasShot = false;
 bool hasDroveBack = false;
@@ -105,8 +99,8 @@ void Robot::AutonomousPeriodic() {
 
     if(abs(m_shooter.getShooterSpeed()) > 2750 && hasShot == false)
     {
-      m_meterLeft.Set(ControlMode::PercentOutput, -.4593);
-      m_meterRight.Set(ControlMode::PercentOutput, -.4539);
+      m_shooter.meterWheelsLeft(-.4593);
+      m_shooter.meterWheelsRigth(-.4593);
       m_intake.intakeSpinny(.930);
       m_shooter.shoot(.5172);
       hasShot = true;
@@ -123,8 +117,8 @@ void Robot::AutonomousPeriodic() {
     {
       m_driveTrain.drive(0, 0);
       m_shooter.shoot(0);
-      m_meterLeft.Set(ControlMode::PercentOutput, 0);
-      m_meterRight.Set(ControlMode::PercentOutput, 0);
+      m_shooter.meterWheelsLeft(0);
+      m_shooter.meterWheelsRigth(0);
       m_intake.intakeSpinny(0);
 
       m_intake.intakePneumaticOut();
@@ -143,6 +137,26 @@ m_driveTrain.getLeftEncoderValue();
 // possible - on the drive train
 // .75
   m_driveTrain.drive(.75 * m_driverController.GetLeftY(), -.75 * m_driverController.GetRightX());
+
+  if (m_driverController.GetAButton()){
+    m_climber.pneumaticArmIn();
+  }
+  else if(m_driverController.GetBButton()){
+    m_climber.pneumaticArmOut();
+  }
+  else if(m_driverController.GetRightBumper()){
+    m_climber.moveStaticDown(.254);
+  }
+  else if(m_driverController.GetLeftBumper()){
+    m_climber.moveStaticUp(.254);
+  }
+  else if(m_driverController.GetBackButton()){
+    m_climber.moveStaticDown(-.254);
+  }
+  else{
+    m_climber.moveStaticUp(0);
+    m_climber.moveStaticDown(0);
+  }
 
   if (m_auxController.GetAButton()){
 
@@ -185,20 +199,24 @@ m_driveTrain.getLeftEncoderValue();
   }
 
   if (m_auxController.GetLeftBumper()){  
-    m_intake.intakePneumaticOut();
+    m_intake.intakePneumaticIn();
     //m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kReverse);
 
     std::cout << "intake reverse \n";
   }
 
   if (m_auxController.GetBackButton()){
-    m_meterLeft.Set(ControlMode::PercentOutput, -.254);
-    m_meterRight.Set(ControlMode::PercentOutput, -.148); 
+   
+   m_shooter.meterWheelsLeft(-.118);
+   m_shooter.meterWheelsRigth(-.254);
+   
+   // m_meterLeft.Set(ControlMode::PercentOutput, -.254);
+   // m_meterRight.Set(ControlMode::PercentOutput, -.148); 
   }
   else 
   {
-    m_meterLeft.Set(ControlMode::PercentOutput, 0);
-    m_meterRight.Set(ControlMode::PercentOutput, 0); 
+    m_shooter.meterWheelsLeft(0);
+    m_shooter.meterWheelsRigth(0);
   }
 
 }
