@@ -46,6 +46,10 @@ void DriveTrain::drive(double a1, double a2)
     m_diffDrive.ArcadeDrive(a1, a2);
 }
 
+void DriveTrain::tankDrive(double rightSpeed, double leftSpeed){
+    m_diffDrive.TankDrive(rightSpeed, leftSpeed);
+}
+
 double DriveTrain::getLeftEncoderValue(){
     //std::cout << m_FLMEncoder.GetPosition() << std::endl;
     return m_FLMEncoder.GetPosition();

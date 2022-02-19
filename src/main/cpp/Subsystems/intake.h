@@ -21,6 +21,7 @@ class intake {
 
         void intakePneumaticIn();
         void intakePneumaticOut();
+        void intakeToggle();
 
         void intakeSpinny(double speed);
 

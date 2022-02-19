@@ -1,7 +1,8 @@
 #include "climber.h"
 
 climber::climber() {
-
+    m_staticDown.SetNeutralMode(Brake);
+    
 }
 
 climber::~climber(){
@@ -10,7 +11,7 @@ climber::~climber(){
 
 void climber::moveStaticUp(double speed){
     //m_staticUp.Set(ControlMode::PercentOutput, speed);
-    m_staticUp.Set(speed);
+   m_staticUp.Set(speed);
 }
 void climber::moveStaticDown(double speed){
     m_staticDown.Set(ControlMode::PercentOutput, speed);

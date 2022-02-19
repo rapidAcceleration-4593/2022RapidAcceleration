@@ -21,6 +21,8 @@ class DriveTrain {
 
         void drive(double a1, double a2);
 
+        void tankDrive(double rightSpeed, double leftSpeed);
+
         double getLeftEncoderValue();
         double getRightEncoderValue();
         void resetEncoder();

@@ -15,8 +15,8 @@ class climber {
         climber();
         ~climber();
 
-        frc::PWMSparkMax m_staticUp{0};
-        frc::PWMSparkMax m_dynamicUp{1};
+        frc::PWMSparkMax m_staticUp{1};
+        frc::PWMSparkMax m_dynamicUp{0};
 
         // m_staticUp{Constants::staticUp};
         TalonSRX m_staticDown{Constants::staticDown};
