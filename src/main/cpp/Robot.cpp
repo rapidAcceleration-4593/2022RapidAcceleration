@@ -19,6 +19,7 @@
 #include <frc/PneumaticsBase.h>
 #include <frc/DoubleSolenoid.h>
 #include "ctre/Phoenix.h"
+#include <frc/Timer.h>
 
 #include "Subsystems/constants.h"
 #include "Subsystems/DriveTrain.h"
@@ -30,6 +31,8 @@
 
 frc::XboxController m_driverController{0};
 frc::XboxController m_auxController{1};
+// frc::Timer m_roboTime;
+
 
 DriveTrain m_driveTrain;
 shooter m_shooter;
@@ -45,7 +48,6 @@ void Robot::RobotInit() {
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
 m_driveTrain.resetEncoder();
-  
 
 }
 
@@ -83,48 +85,50 @@ void Robot::AutonomousInit() {
   }
 
   m_intake.intakePneumaticIn();
-  
 
 }
 
 void Robot::AutonomousPeriodic() {
-  if (m_autoSelected == kAutoNameCustom) {
-    // Custom Auto goes here
-  } else {
-    // Default Auto goes here
-    if (hasShot == false){
-    m_shooter.shoot(.5172);
-    }
 
 
-    if(abs(m_shooter.getShooterSpeed()) > 2750 && hasShot == false)
-    {
-      m_shooter.meterWheelsLeft(-.4593);
-      m_shooter.meterWheelsRigth(-.4593);
-      m_intake.intakeSpinny(.930);
-      m_shooter.shoot(.5172);
-      hasShot = true;
-    }
-
-    if(abs(m_driveTrain.getAverageEncoder()) < 69 && hasShot == true)
-    {
-      m_driveTrain.drive(.25, 0);
-     // m_leftShooterMotor.Set(0);
-      //m_rightShooterMotor.Set(0);
-      hasDroveBack = true;
-    }
-    else if(abs(m_driveTrain.getAverageEncoder() > 69))
-    {
-      m_driveTrain.drive(0, 0);
-      m_shooter.shoot(0);
-      m_shooter.meterWheelsLeft(0);
-      m_shooter.meterWheelsRigth(0);
-      m_intake.intakeSpinny(0);
-
-      m_intake.intakePneumaticOut();
-    }
+  // if (m_autoSelected == kAutoNameCustom) {
+  //   // Custom Auto goes here
+  // } else {
     
-  }
+  //   m_roboTime.Start();
+
+  //   // Default Auto goes here
+  //   if (m_roboTime.Get() < 1_s){
+  //   m_shooter.shoot(.5172);
+  //   }
+
+
+  //   if(m_roboTime.Get() > 1_s && m_roboTime.Get() < 3_s)
+  //   {
+  //     m_shooter.meterWheelsLeftRight(-.4593,-.4593);
+  //     m_intake.intakeSpinny(.930);
+  //     m_shooter.shoot(.5172);
+  //     hasShot = true;
+  //   }
+
+  //   if(abs(m_driveTrain.getAverageEncoder()) < 69 && m_roboTime.Get() > 3_s)
+  //   {
+  //     m_driveTrain.drive(.5, 0);
+  //    // m_leftShooterMotor.Set(0);
+  //     //m_rightShooterMotor.Set(0);
+  //     hasDroveBack = true;
+  //   }
+  //   else if(abs(m_driveTrain.getAverageEncoder() > 69))
+  //   {
+  //     m_driveTrain.drive(0, 0);
+  //     m_shooter.shoot(0);
+  //     m_shooter.meterWheelsLeftRight(0,0);
+  //     m_intake.intakeSpinny(0);
+  //     // m_roboTime.Stop();
+  //     m_intake.intakePneumaticOut();
+  //   }
+    
+  // }
 }
 
 void Robot::TeleopInit() {}
@@ -145,17 +149,28 @@ m_driveTrain.getLeftEncoderValue();
     m_climber.pneumaticArmOut();
   }
   else if(m_driverController.GetRightBumper()){
-    m_climber.moveStaticDown(.254);
+    m_climber.moveStaticDown(1);
   }
   else if(m_driverController.GetLeftBumper()){
     m_climber.moveStaticUp(.254);
   }
   else if(m_driverController.GetBackButton()){
-    m_climber.moveStaticDown(-.254);
+    m_climber.moveStaticDown(-1);
+  }
+  else if (m_driverController.GetYButton()){
+    m_climber.moveDynamicUp(.254);
+  }
+  else if (m_driverController.GetXButton()){
+    m_climber.moveDynamicDown(1);
+  }
+  else if (m_driverController.GetLeftTriggerAxis()){
+    m_climber.moveDynamicDown(-1);
   }
   else{
     m_climber.moveStaticUp(0);
     m_climber.moveStaticDown(0);
+    m_climber.moveDynamicDown(0);
+    m_climber.moveDynamicUp(0);
   }
 
   if (m_auxController.GetAButton()){
@@ -192,14 +207,14 @@ m_driveTrain.getLeftEncoderValue();
       //could use .toggle();
       //m_RLM.Set(1);
       //m_FLM.Set(1);
-    m_intake.intakePneumaticOut();
+    m_intake.intakePneumaticIn();
     //m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kForward);
 
     std::cout << "intake forward \n";
   }
 
   if (m_auxController.GetLeftBumper()){  
-    m_intake.intakePneumaticIn();
+    m_intake.intakePneumaticOut();
     //m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kReverse);
 
     std::cout << "intake reverse \n";
@@ -207,16 +222,13 @@ m_driveTrain.getLeftEncoderValue();
 
   if (m_auxController.GetBackButton()){
    
-   m_shooter.meterWheelsLeft(-.118);
-   m_shooter.meterWheelsRigth(-.254);
-   
+   m_shooter.meterWheelsLeftRight(-.118,-.254);   
    // m_meterLeft.Set(ControlMode::PercentOutput, -.254);
    // m_meterRight.Set(ControlMode::PercentOutput, -.148); 
   }
   else 
   {
-    m_shooter.meterWheelsLeft(0);
-    m_shooter.meterWheelsRigth(0);
+    m_shooter.meterWheelsLeftRight(0,0);
   }
 
 }

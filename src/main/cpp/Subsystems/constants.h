@@ -21,10 +21,10 @@ class Constants
         static const int meterMotorRight = 12;
         static const int meterMotorLeft = 9;
 
-        static const int staticUp = 11;
+        //static const int staticUp = 11;
         static const int staticDown = 10;
-        static const int dynamicUp = 16;
-        static const int dynamicDown = 17;
+       // static const int dynamicUp = 16;
+        static const int dynamicDown = 11;
 
         static const int climberPneumaticUp = 4;
         static const int climberPneumaticDown = 5;

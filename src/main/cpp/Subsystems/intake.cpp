@@ -9,11 +9,11 @@ intake::~intake(){
 }
 
 void intake::intakePneumaticIn(){
-    m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kReverse);
+    m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kForward);
 }
 
 void intake::intakePneumaticOut(){
-     m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kForward);
+     m_intakePneumatics.Set(frc::DoubleSolenoid::Value::kReverse);
 }
 
 void intake::intakeSpinny(double speed){

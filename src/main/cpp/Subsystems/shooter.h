@@ -23,7 +23,6 @@ class shooter {
 
         void shoot(double speed);
         double getShooterSpeed();
-        void meterWheelsLeft(double speed);
-        void meterWheelsRigth(double speed);
+        void meterWheelsLeftRight(double leftspeed, double rightspeed);
 
 };
