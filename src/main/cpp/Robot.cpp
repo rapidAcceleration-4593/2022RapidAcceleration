@@ -132,11 +132,11 @@ void Robot::AutonomousPeriodic() {
 
   else if (m_autoSelected == kAutoNameNoDrive){
 
-    if (time(0) - startAutoTime < 8){
+    if (time(0) - startAutoTime < 6){
       m_shooter.shoot(.65);
     }
 
-    if (time(0) - startAutoTime < 12 && time(0) - startAutoTime > 8)
+    else if (time(0) - startAutoTime < 10 && time(0) - startAutoTime > 6)
     {
       m_shooter.shoot(.65);
       m_shooter.meterWheelsLeftRight(-.4593,-.4539);
