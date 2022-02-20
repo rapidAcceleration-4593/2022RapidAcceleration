@@ -46,8 +46,8 @@ void DriveTrain::drive(double a1, double a2)
     m_diffDrive.ArcadeDrive(a1, a2);
 }
 
-void DriveTrain::tankDrive(double rightSpeed, double leftSpeed){
-    m_diffDrive.TankDrive(rightSpeed, leftSpeed);
+void DriveTrain::tankDrive(double leftSpeed, double rightSpeed){
+    m_diffDrive.TankDrive(leftSpeed, rightSpeed);
 }
 
 double DriveTrain::getLeftEncoderValue(){
@@ -70,3 +70,12 @@ double DriveTrain::getAverageEncoder()
     return (m_FLMEncoder.GetPosition() + m_FRMEncoder.GetPosition()) / 2;
 }
 
+void DriveTrain::coastMode()
+{
+    // set coast mode somehow
+}
+
+void DriveTrain::brakeMode()
+{
+    // set brake mode somehow
+}

@@ -24,7 +24,8 @@ class Robot : public frc::TimedRobot {
 
  private:
   frc::SendableChooser<std::string> m_chooser;
-  const std::string kAutoNameDefault = "Default";
-  const std::string kAutoNameCustom = "My Auto";
+  const std::string kAutoNameDefault = "GOOD AUTO";
+  const std::string kAutoNameCustom = "BAD AUTO";
+  const std::string kAutoNameNoDrive = "NO DRIVE AUTO";
   std::string m_autoSelected;
 };

@@ -28,6 +28,9 @@ class DriveTrain {
         void resetEncoder();
         double getAverageEncoder();
 
+        void coastMode();
+        void brakeMode();
+
         rev::SparkMaxPIDController m_FLMPID = m_FLM.GetPIDController();
         rev::SparkMaxPIDController m_RLMPID = m_RLM.GetPIDController();
         rev::SparkMaxPIDController m_FRMPID = m_FRM.GetPIDController();

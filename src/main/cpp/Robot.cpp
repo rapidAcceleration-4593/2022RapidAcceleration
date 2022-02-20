@@ -45,6 +45,7 @@ time_t startAutoTime;
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
+  m_chooser.AddOption(kAutoNameNoDrive, kAutoNameNoDrive);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
 m_driveTrain.resetEncoder();
@@ -94,8 +95,69 @@ void Robot::AutonomousPeriodic() {
 
   if (m_autoSelected == kAutoNameCustom) {
     // Custom Auto goes here
-  } else {
+
+    // THIS IS THE KINDA BAD / TURNING AUTO
+
+    if (time(0) - startAutoTime < 2){
+    m_shooter.shoot(.65);
+    }
+
+    if(time(0) - startAutoTime < 4 && time(0) - startAutoTime > 2)
+    {
+      m_shooter.meterWheelsLeftRight(-.4593,-.4539);
+      m_intake.intakeSpinny(.930);
+      m_shooter.shoot(.65);
+      hasShot = true;
+    }
+
+    if(abs(m_driveTrain.getAverageEncoder()) < 30 && time(0) - startAutoTime > 4)
+    {
+      m_driveTrain.tankDrive(.4593, .6);
+     // m_leftShooterMotor.Set(0);
+      //m_rightShooterMotor.Set(0);
+      hasDroveBack = true;
+    }
+    else if(abs(m_driveTrain.getAverageEncoder() > 30))
+    {
+      m_driveTrain.drive(0, 0);
+      m_shooter.shoot(0);
+      m_shooter.meterWheelsLeftRight(0,0);
+      m_intake.intakeSpinny(0);
+      m_intake.intakePneumaticOut();
+    }
+  } 
+
+    // SIMPLE AUTO STUFF/ NO DRIVE
+
+
+  else if (m_autoSelected == kAutoNameNoDrive){
+
+    if (time(0) - startAutoTime < 8){
+      m_shooter.shoot(.65);
+    }
+
+    if (time(0) - startAutoTime < 12 && time(0) - startAutoTime > 8)
+    {
+      m_shooter.shoot(.65);
+      m_shooter.meterWheelsLeftRight(-.4593,-.4539);
+      m_intake.intakeSpinny(.930);
+      hasShot = true;
+    }
+    else {
+      m_shooter.meterWheelsLeftRight(0,0);
+      m_intake.intakeSpinny(0);
+      m_shooter.shoot(0);
+    }
+
+  } 
+
+
+  else {
     
+
+    // THIS IS A GOOD ONE 
+
+
     // Default Auto goes here
     if (time(0) - startAutoTime < 2){
     m_shooter.shoot(.5172);
