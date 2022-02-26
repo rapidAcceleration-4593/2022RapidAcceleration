@@ -19,6 +19,7 @@
 #include <frc/PneumaticsBase.h>
 #include <frc/DoubleSolenoid.h>
 #include "ctre/Phoenix.h"
+#include <cameraserver/CameraServer.h>
 
 #include "Subsystems/constants.h"
 #include "Subsystems/DriveTrain.h"
@@ -49,6 +50,8 @@ void Robot::RobotInit() {
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
 m_driveTrain.resetEncoder();
+
+frc::CameraServer::StartAutomaticCapture();
 
 }
 
