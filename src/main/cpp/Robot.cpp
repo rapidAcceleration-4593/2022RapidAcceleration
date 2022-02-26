@@ -88,6 +88,7 @@ void Robot::AutonomousInit() {
   m_driveTrain.resetEncoder();
   m_intake.intakePneumaticIn();
   startAutoTime = time(0);
+  m_driveTrain.brakeMode();
 }
 
 void Robot::AutonomousPeriodic() {
@@ -190,7 +191,10 @@ void Robot::AutonomousPeriodic() {
   }
 }
 
-void Robot::TeleopInit() {}
+void Robot::TeleopInit() {
+  m_driveTrain.coastMode();
+
+}
 
 void Robot::TeleopPeriodic() {
 
@@ -209,22 +213,22 @@ m_driveTrain.getLeftEncoderValue();
   else if(m_driverController.GetBButton()){
     m_climber.pneumaticArmOut();
   }
-  else if(m_driverController.GetRightBumper()){
+  else if(m_driverController.GetLeftBumper()){
     m_climber.moveStaticDown(.973);
   }
-  else if(m_driverController.GetLeftBumper()){ 
+  else if(m_driverController.GetRightBumper()){ 
   m_climber.moveStaticUp(.254);
   }
   else if(m_driverController.GetBackButton()){
     m_climber.moveStaticDown(-.973);
   }
-  else if (m_driverController.GetYButton()){
+  else if (m_driverController.GetRightTriggerAxis()){
     m_climber.moveDynamicUp(.254);
    }
-  else if (m_driverController.GetXButton()){
+  else if (m_driverController.GetLeftTriggerAxis()){
   m_climber.moveDynamicDown(1);
    }
-  else if (m_driverController.GetLeftTriggerAxis()){
+  else if (m_driverController.GetStartButton()){
   m_climber.moveDynamicDown(-1);
   }
   else{
@@ -239,13 +243,16 @@ m_driveTrain.getLeftEncoderValue();
   if (m_auxController.GetAButton()){
     m_shooter.shoot(.4593);
     //std::cout << m_shooterEncoder.GetVelocity() << std::endl;
+    m_driveTrain.brakeMode();
   }
+
   else if (m_auxController.GetYButton()) {
     m_shooter.shoot(-.118);
   }
   else
   {
    m_shooter.shoot(0);
+   m_driveTrain.coastMode();
   }
   if (m_auxController.GetBButton()){
     m_intake.intakeSpinny(.930);
