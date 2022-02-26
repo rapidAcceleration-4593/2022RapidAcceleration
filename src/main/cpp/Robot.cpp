@@ -114,14 +114,14 @@ void Robot::AutonomousPeriodic() {
       hasShot = true;
     }
 
-    if(abs(m_driveTrain.getAverageEncoder()) < 30 && time(0) - startAutoTime > 4)
+    else if(abs(m_driveTrain.getAverageEncoder()) < 45 && time(0) - startAutoTime > 4)
     {
       m_driveTrain.tankDrive(.4593, .6);
      // m_leftShooterMotor.Set(0);
       //m_rightShooterMotor.Set(0);
       hasDroveBack = true;
     }
-    else if(abs(m_driveTrain.getAverageEncoder() > 30))
+    else if(abs(m_driveTrain.getAverageEncoder() > 45))
     {
       m_driveTrain.drive(0, 0);
       m_shooter.shoot(0);
@@ -175,14 +175,14 @@ void Robot::AutonomousPeriodic() {
       hasShot = true;
     }
 
-    if(abs(m_driveTrain.getAverageEncoder()) < 50 && time(0) - startAutoTime > 4)
+    if(abs(m_driveTrain.getAverageEncoder()) < 45 && time(0) - startAutoTime > 4)
     {
       m_driveTrain.drive(.5172, 0);
      // m_leftShooterMotor.Set(0);
       //m_rightShooterMotor.Set(0);
       hasDroveBack = true;
     }
-    else if(abs(m_driveTrain.getAverageEncoder() > 50))
+    else if(abs(m_driveTrain.getAverageEncoder() > 45))
     {
       m_driveTrain.drive(0, 0);
       m_shooter.shoot(0);
@@ -210,33 +210,37 @@ m_driveTrain.getLeftEncoderValue();
 
   //m_driveTrain.tankDrive(m_driverController.GetLeftY(), m_driverController.GetRightY());
 
+  
+  if(m_driverController.GetLeftBumper()){
+    m_climber.moveStaticDown(.973);
+  }
+  else if(m_driverController.GetRightBumper()){ 
+    m_climber.moveStaticUp(.254);
+  }
+  else if(m_driverController.GetBackButton()){
+    m_climber.moveStaticDown(-.973);
+  }
+  else {
+    m_climber.moveStaticUp(0);
+    m_climber.moveStaticDown(0);
+  }
+  
   if (m_driverController.GetAButton()){
     m_climber.pneumaticArmIn();
   }
   else if(m_driverController.GetBButton()){
     m_climber.pneumaticArmOut();
   }
-  else if(m_driverController.GetLeftBumper()){
-    m_climber.moveStaticDown(.973);
-  }
-  else if(m_driverController.GetRightBumper()){ 
-  m_climber.moveStaticUp(.254);
-  }
-  else if(m_driverController.GetBackButton()){
-    m_climber.moveStaticDown(-.973);
-  }
   else if (m_driverController.GetRightTriggerAxis()){
     m_climber.moveDynamicUp(.254);
    }
   else if (m_driverController.GetLeftTriggerAxis()){
-  m_climber.moveDynamicDown(1);
+    m_climber.moveDynamicDown(1);
    }
   else if (m_driverController.GetStartButton()){
-  m_climber.moveDynamicDown(-1);
+    m_climber.moveDynamicDown(-1);
   }
   else{
-    m_climber.moveStaticUp(0);
-    m_climber.moveStaticDown(0);
     m_climber.moveDynamicDown(0);
     m_climber.moveDynamicUp(0);
   }
@@ -244,11 +248,10 @@ m_driveTrain.getLeftEncoderValue();
   // AUX CONTROLLER STUFFS
 
   if (m_auxController.GetAButton()){
-    m_shooter.shoot(.4593);
+    m_shooter.shoot(.4953);
     //std::cout << m_shooterEncoder.GetVelocity() << std::endl;
     m_driveTrain.brakeMode();
   }
-
   else if (m_auxController.GetYButton()) {
     m_shooter.shoot(-.118);
   }
@@ -288,8 +291,6 @@ m_driveTrain.getLeftEncoderValue();
   }
 
 }
-
-
 
 
 void Robot::DisabledInit() {}

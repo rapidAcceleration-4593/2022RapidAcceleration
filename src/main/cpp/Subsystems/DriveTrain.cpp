@@ -73,13 +73,13 @@ double DriveTrain::getAverageEncoder()
 void DriveTrain::coastMode()
 {
     // set coast mode somehow
-   // m_FRM.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    //m_FLM.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    m_FRM.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    m_FLM.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
 }
 
 void DriveTrain::brakeMode()
 {
     // set brake mode somehow
-   // m_FRM.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-   // m_FLM.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+   m_FRM.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+   m_FLM.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 }
