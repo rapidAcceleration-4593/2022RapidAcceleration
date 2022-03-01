@@ -51,7 +51,7 @@ void Robot::RobotInit() {
 
 m_driveTrain.resetEncoder();
 
-frc::CameraServer::StartAutomaticCapture();
+// frc::CameraServer::StartAutomaticCapture();
 
 }
 
@@ -103,14 +103,14 @@ void Robot::AutonomousPeriodic() {
     // THIS IS THE KINDA BAD / TURNING AUTO
 
     if (time(0) - startAutoTime < 2){
-    m_shooter.shoot(.65);
+    m_shooter.shoot(.5172);
     }
 
     if(time(0) - startAutoTime < 4 && time(0) - startAutoTime > 2)
     {
       m_shooter.meterWheelsLeftRight(-.4593,-.4539);
       m_intake.intakeSpinny(.930);
-      m_shooter.shoot(.65);
+      m_shooter.shoot(.4953);
       hasShot = true;
     }
 
@@ -171,18 +171,18 @@ void Robot::AutonomousPeriodic() {
     {
       m_shooter.meterWheelsLeftRight(-.4593,-.4539);
       m_intake.intakeSpinny(.930);
-      m_shooter.shoot(.5172);
+      m_shooter.shoot(.4953);
       hasShot = true;
     }
 
-    if(abs(m_driveTrain.getAverageEncoder()) < 45 && time(0) - startAutoTime > 4)
+    if(abs(m_driveTrain.getAverageEncoder()) < 50 && time(0) - startAutoTime > 4)
     {
       m_driveTrain.drive(.5172, 0);
      // m_leftShooterMotor.Set(0);
       //m_rightShooterMotor.Set(0);
       hasDroveBack = true;
     }
-    else if(abs(m_driveTrain.getAverageEncoder() > 45))
+    else if(abs(m_driveTrain.getAverageEncoder() > 50))
     {
       m_driveTrain.drive(0, 0);
       m_shooter.shoot(0);
@@ -248,7 +248,7 @@ m_driveTrain.getLeftEncoderValue();
   // AUX CONTROLLER STUFFS
 
   if (m_auxController.GetAButton()){
-    m_shooter.shoot(.4953);
+    m_shooter.shoot(.47);
     //std::cout << m_shooterEncoder.GetVelocity() << std::endl;
     m_driveTrain.brakeMode();
   }

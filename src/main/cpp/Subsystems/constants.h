@@ -29,12 +29,14 @@ class Constants
         static const int climberPneumaticUp = 4;
         static const int climberPneumaticDown = 5;
 
-        static const int leftP = 0.1058;
+        // left p = .1058
+        static const int leftP = (0.56937 + .1058)/2;
         static const int leftI = 0;
         static const int leftD = 0;
         static const int leftFF = .000015;
         
-        static const int rightP = 0.12146;
+        // right p = .12146
+        static const int rightP = (0.56172 + .12146)/2;
         static const int rightI = 0;
         static const int rightD = 0;
         static const int rightFF = .000015;
