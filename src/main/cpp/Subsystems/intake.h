@@ -16,8 +16,11 @@ class intake {
         ~intake();
 
         TalonSRX m_intake{Constants::intakeMotor};
-        frc::DoubleSolenoid m_intakePneumatics{Constants::PH, frc::PneumaticsModuleType::REVPH,
-                                                 Constants::intakeForward, Constants::intakeBackward};
+        frc::DoubleSolenoid m_rightIntakePneumatics{Constants::PH, frc::PneumaticsModuleType::REVPH,
+                                                 Constants::intakeForwardRight, Constants::intakeBackwardRight};
+        frc::DoubleSolenoid m_leftIntakePneumatics {Constants::PH, frc::PneumaticsModuleType::REVPH,
+                                                    Constants::intakeForwardLeft, Constants::intakeBackwardLeft};
+
 
         void intakePneumaticIn();
         void intakePneumaticOut();

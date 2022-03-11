@@ -15,8 +15,11 @@ class Constants
 
         static const int PH = 30;
 
-        static const int intakeForward = 0;
-        static const int intakeBackward = 1;
+        static const int intakeForwardRight = 0;
+        static const int intakeBackwardRight = 1;
+
+        static const int intakeForwardLeft = 2;
+        static const int intakeBackwardLeft = 3;
 
         static const int meterMotorRight = 12;
         static const int meterMotorLeft = 9;
@@ -28,6 +31,9 @@ class Constants
 
         static const int climberPneumaticUp = 4;
         static const int climberPneumaticDown = 5;
+
+        static const int horizontalLime = 5 ;
+        static const int verticalLime = 5;
 
         // left p = .1058
         static const int leftP = (0.56937 + .1058)/2;

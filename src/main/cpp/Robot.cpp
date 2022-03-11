@@ -21,11 +21,19 @@
 #include "ctre/Phoenix.h"
 #include <cameraserver/CameraServer.h>
 
+#include "frc/smartdashboard/Smartdashboard.h"
+#include "networktables/NetworkTable.h"
+#include "networktables/NetworkTableInstance.h"
+#include "networktables/NetworkTableEntry.h"
+#include "networktables/NetworkTableValue.h"
+#include "wpi/span.h"
+
 #include "Subsystems/constants.h"
 #include "Subsystems/DriveTrain.h"
 #include "Subsystems/shooter.h"
 #include "Subsystems/climber.h"
 #include "Subsystems/intake.h"
+#include "Subsystems/vision.h"
 
 #include <iostream>
 #include <ctime>
@@ -201,6 +209,27 @@ void Robot::TeleopInit() {
 
 void Robot::TeleopPeriodic() {
 
+// LIMELIGHT STUFF
+
+auto table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+ 
+double targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
+
+double targetOffsetAngle_Vertical = table->GetNumber("ty",0.0);
+
+double targetArea = table->GetNumber("ta",0.0);
+
+double targetSkew = table->GetNumber("ts",0.0);
+
+double isTarget = table->GetNumber("tv",0.0);
+
+//std::cout << targetArea << std::endl;
+
+if(isTarget == 1 && targetOffsetAngle_Vertical < Constants::verticalLime && targetOffsetAngle_Horizontal < Constants::horizontalLime ){
+  std::cout << ":)" << std::endl;
+}
+
+
 m_driveTrain.getRightEncoderValue();
 m_driveTrain.getLeftEncoderValue();
 
@@ -264,7 +293,7 @@ m_driveTrain.getLeftEncoderValue();
    m_driveTrain.coastMode();
   }
   if (m_auxController.GetBButton()){
-    m_intake.intakeSpinny(1);
+    m_intake.intakeSpinny(.65);
   }
   else if (m_auxController.GetXButton()){
     m_intake.intakeSpinny(-.876);
