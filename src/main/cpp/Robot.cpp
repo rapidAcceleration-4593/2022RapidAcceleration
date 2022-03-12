@@ -45,6 +45,7 @@ DriveTrain m_driveTrain;
 shooter m_shooter;
 intake m_intake;
 climber m_climber;
+limelight m_limelight;
 
 bool hasShot = false;
 bool hasDroveBack = false;
@@ -55,6 +56,7 @@ void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   m_chooser.AddOption(kAutoNameNoDrive, kAutoNameNoDrive);
+  m_chooser.AddOption(kAutoNameTwoBall, kAutoNameTwoBall);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
 m_driveTrain.resetEncoder();
@@ -200,6 +202,7 @@ void Robot::AutonomousPeriodic() {
     }
     
   }
+
 }
 
 void Robot::TeleopInit() {
@@ -209,24 +212,15 @@ void Robot::TeleopInit() {
 
 void Robot::TeleopPeriodic() {
 
+frc::SmartDashboard::PutBoolean("lined up", m_limelight.inRange());
+
 // LIMELIGHT STUFF
-
-auto table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
- 
-double targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
-
-double targetOffsetAngle_Vertical = table->GetNumber("ty",0.0);
-
-double targetArea = table->GetNumber("ta",0.0);
-
-double targetSkew = table->GetNumber("ts",0.0);
-
-double isTarget = table->GetNumber("tv",0.0);
-
-//std::cout << targetArea << std::endl;
-
-if(isTarget == 1 && targetOffsetAngle_Vertical < Constants::verticalLime && targetOffsetAngle_Horizontal < Constants::horizontalLime ){
-  std::cout << ":)" << std::endl;
+if(m_limelight.inRange()){
+    std::cout << ":)" << std::endl;
+}
+else
+{
+  std::cout << ":(" << std::endl;
 }
 
 
