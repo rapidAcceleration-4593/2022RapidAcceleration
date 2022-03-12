@@ -27,5 +27,6 @@ class Robot : public frc::TimedRobot {
   const std::string kAutoNameDefault = "GOOD AUTO";
   const std::string kAutoNameCustom = "BAD AUTO";
   const std::string kAutoNameNoDrive = "NO DRIVE AUTO";
+  const std::string kAutoNameTwoBall = "TWO BALL AUTO";
   std::string m_autoSelected;
 };

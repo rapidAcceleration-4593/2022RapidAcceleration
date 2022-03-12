@@ -16,13 +16,18 @@ class limelight {
     public:
         limelight();
         ~limelight();
-
         
+        // void createTable();
+
         double getAngleX();
         double getAngleY();
         double getArea();
         double getSkew();
-        double isTarget();
-        bool lightOn();
-        bool lightOff();
+        bool isTarget();
+        // bool lightOn();
+        // bool lightOff();
+
+        bool inRange();
+
+        std::shared_ptr<nt::NetworkTable> table;
 };
