@@ -50,6 +50,8 @@ limelight m_limelight;
 bool hasShot = false;
 bool hasDroveBack = false;
 
+bool slurpedBall = false;
+
 time_t startAutoTime;
 
 void Robot::RobotInit() {
@@ -165,6 +167,39 @@ void Robot::AutonomousPeriodic() {
 
   } 
 
+  // TWO BALL
+
+
+  else if(m_autoSelected == kAutoNameTwoBall){
+    
+    m_intake.intakePneumaticOut();
+
+   if(abs(m_driveTrain.getAverageEncoder()) < 35 && !slurpedBall){
+    m_intake.intakeSpinny(.6);
+    m_driveTrain.drive(-.4593,-.01);
+    m_limelight.lightOff();
+
+    std::cout << m_driveTrain.getRightEncoderValue() << std::endl;
+    
+   }
+    
+    else if (abs(m_driveTrain.getRightEncoderValue()) < 59){
+        m_driveTrain.drive(0,.5);
+    }
+    
+    // else if(m_limelight.getAngleX() < 4 && m_limelight.getAngleX() > -8 && !m_limelight.isTarget()){
+    //   m_limelight.lightOn();
+    //   m_intake.intakeSpinny(0);
+    //   m_driveTrain.drive(0,.5);
+    //   slurpedBall = true;
+    // } 
+
+  else {
+    m_driveTrain.drive(0,0);
+    m_limelight.lightOff();
+  }
+
+}
 
   else {
     

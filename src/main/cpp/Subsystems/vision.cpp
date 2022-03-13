@@ -47,13 +47,13 @@ bool limelight::isTarget(){
     }
 }
 
-// bool limelight::lightOn(){
+void limelight::lightOn(){
+    table->PutNumber("<ledMode>",3);
+}
 
-// }
-
-// bool limelight::lightOff(){
-
-// }
+void limelight::lightOff(){
+    table->PutNumber("<ledMode>",1);
+}
 
 bool limelight::inRange(){
     if (isTarget() == 0){

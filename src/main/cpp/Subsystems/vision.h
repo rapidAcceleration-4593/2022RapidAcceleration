@@ -24,8 +24,8 @@ class limelight {
         double getArea();
         double getSkew();
         bool isTarget();
-        // bool lightOn();
-        // bool lightOff();
+        void lightOn();
+        void lightOff();
 
         bool inRange();
 
