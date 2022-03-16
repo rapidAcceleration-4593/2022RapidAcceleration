@@ -11,6 +11,8 @@ class Constants
         static const int shooterLeft = 5;
         static const int shooterRight = 6;
 
+        static const int bigMeteringWheel = 14;
+
         static const int intakeMotor = 7;
 
         static const int PH = 30;

@@ -115,14 +115,14 @@ void Robot::AutonomousPeriodic() {
     // THIS IS THE KINDA BAD / TURNING AUTO
 
     if (time(0) - startAutoTime < 2){
-    m_shooter.shoot(.65);
+    m_shooter.shoot(.65, .4593);
     }
 
     if(time(0) - startAutoTime < 4 && time(0) - startAutoTime > 2)
     {
       m_shooter.meterWheelsLeftRight(-.4593,-.4539);
       m_intake.intakeSpinny(.930);
-      m_shooter.shoot(.65);
+      m_shooter.shoot(.65, .4593);
       hasShot = true;
     }
 
@@ -136,7 +136,7 @@ void Robot::AutonomousPeriodic() {
     else if(abs(m_driveTrain.getAverageEncoder() > 30))
     {
       m_driveTrain.drive(0, 0);
-      m_shooter.shoot(0);
+      m_shooter.shoot(0,0);
       m_shooter.meterWheelsLeftRight(0,0);
       m_intake.intakeSpinny(0);
       m_intake.intakePneumaticOut();
@@ -149,12 +149,12 @@ void Robot::AutonomousPeriodic() {
   else if (m_autoSelected == kAutoNameNoDrive){
 
     if (time(0) - startAutoTime < 6){
-      m_shooter.shoot(.65);
+      m_shooter.shoot(.65, .4593);
     }
 
     else if (time(0) - startAutoTime < 10 && time(0) - startAutoTime > 6)
     {
-      m_shooter.shoot(.65);
+      m_shooter.shoot(.65, .4593);
       m_shooter.meterWheelsLeftRight(-.4593,-.4539);
       m_intake.intakeSpinny(.930);
       hasShot = true;
@@ -162,7 +162,7 @@ void Robot::AutonomousPeriodic() {
     else {
       m_shooter.meterWheelsLeftRight(0,0);
       m_intake.intakeSpinny(0);
-      m_shooter.shoot(0);
+      m_shooter.shoot(0, 0);
     }
 
   } 
@@ -185,8 +185,13 @@ void Robot::AutonomousPeriodic() {
     
     else if (abs(m_driveTrain.getRightEncoderValue()) < 59){
         m_driveTrain.drive(0,.5);
+        slurpedBall = true;
     }
-    
+    else if (m_limelight.isTarget() && slurpedBall){
+      m_driveTrain.drive(.25,0);
+    }
+
+
     // else if(m_limelight.getAngleX() < 4 && m_limelight.getAngleX() > -8 && !m_limelight.isTarget()){
     //   m_limelight.lightOn();
     //   m_intake.intakeSpinny(0);
@@ -209,14 +214,14 @@ void Robot::AutonomousPeriodic() {
 
     // Default Auto goes here
     if (time(0) - startAutoTime < 2){
-    m_shooter.shoot(.48);
+    m_shooter.shoot(.48, .4593);
     }
 
     if(time(0) - startAutoTime < 4 && time(0) - startAutoTime > 2)
     {
       m_shooter.meterWheelsLeftRight(-.4593,-.4539);
       m_intake.intakeSpinny(.930);
-      m_shooter.shoot(.48);
+      m_shooter.shoot(.48, .4593);
       hasShot = true;
     }
 
@@ -230,7 +235,7 @@ void Robot::AutonomousPeriodic() {
     else if(abs(m_driveTrain.getAverageEncoder() > 50))
     {
       m_driveTrain.drive(0, 0);
-      m_shooter.shoot(0);
+      m_shooter.shoot(0, 0);
       m_shooter.meterWheelsLeftRight(0,0);
       m_intake.intakeSpinny(0);
       m_intake.intakePneumaticOut();
@@ -308,17 +313,17 @@ m_driveTrain.getLeftEncoderValue();
   // AUX CONTROLLER STUFFS
 
   if (m_auxController.GetAButton()){
-    m_shooter.shoot(.48);
+    m_shooter.shoot(.48, .876);
     //std::cout << m_shooterEncoder.GetVelocity() << std::endl;
     m_driveTrain.brakeMode();
   }
 
   else if (m_auxController.GetYButton()) {
-    m_shooter.shoot(-.3);
+    m_shooter.shoot(-.3, -1);
   }
   else
   {
-   m_shooter.shoot(0);
+   m_shooter.shoot(0, 0);
    m_driveTrain.coastMode();
   }
   if (m_auxController.GetBButton()){
@@ -344,11 +349,14 @@ m_driveTrain.getLeftEncoderValue();
 
   if (m_auxController.GetLeftTriggerAxis()){
    
-   m_shooter.meterWheelsLeftRight(-.118,-.254);   
+   m_shooter.meterWheelsLeftRight(-.118,-.254);  
+   m_shooter.bigWheel(.254);
+    
   }
   else 
   {
     m_shooter.meterWheelsLeftRight(0,0);
+    m_shooter.bigWheel(0);
   }
 
 }
