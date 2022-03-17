@@ -30,9 +30,9 @@ class climber {
         void pneumaticArmOut();
         void pneumaticArmIn();
         
-        void moveStaticUp(double speed);
+       // void moveStaticUp(double speed);
         void moveStaticDown(double speed);
-        void moveDynamicUp(double speed);
+       // void moveDynamicUp(double speed);
         void moveDynamicDown(double speed);
 
 };

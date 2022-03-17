@@ -32,7 +32,6 @@
 #include "Subsystems/DriveTrain.h"
 #include "Subsystems/shooter.h"
 #include "Subsystems/climber.h"
-#include "Subsystems/intake.h"
 #include "Subsystems/vision.h"
 
 #include <iostream>
@@ -43,7 +42,6 @@ frc::XboxController m_auxController{1};
 
 DriveTrain m_driveTrain;
 shooter m_shooter;
-intake m_intake;
 climber m_climber;
 limelight m_limelight;
 
@@ -101,7 +99,7 @@ void Robot::AutonomousInit() {
   }
 
   m_driveTrain.resetEncoder();
-  m_intake.intakePneumaticIn();
+  m_shooter.intakePneumaticIn();
   startAutoTime = time(0);
   m_driveTrain.brakeMode();
 }
@@ -115,14 +113,13 @@ void Robot::AutonomousPeriodic() {
     // THIS IS THE KINDA BAD / TURNING AUTO
 
     if (time(0) - startAutoTime < 2){
-    m_shooter.shoot(.65, .4593);
+    m_shooter.shoot(.65);
     }
 
     if(time(0) - startAutoTime < 4 && time(0) - startAutoTime > 2)
     {
-      m_shooter.meterWheelsLeftRight(-.4593,-.4539);
-      m_intake.intakeSpinny(.930);
-      m_shooter.shoot(.65, .4593);
+      m_shooter.intakeSpinny(.930, .254);
+      m_shooter.shoot(.65);
       hasShot = true;
     }
 
@@ -136,10 +133,9 @@ void Robot::AutonomousPeriodic() {
     else if(abs(m_driveTrain.getAverageEncoder() > 30))
     {
       m_driveTrain.drive(0, 0);
-      m_shooter.shoot(0,0);
-      m_shooter.meterWheelsLeftRight(0,0);
-      m_intake.intakeSpinny(0);
-      m_intake.intakePneumaticOut();
+      m_shooter.shoot(0);
+      m_shooter.intakeSpinny(0, 0);
+      m_shooter.intakePneumaticOut();
     }
   } 
 
@@ -149,20 +145,18 @@ void Robot::AutonomousPeriodic() {
   else if (m_autoSelected == kAutoNameNoDrive){
 
     if (time(0) - startAutoTime < 6){
-      m_shooter.shoot(.65, .4593);
+      m_shooter.shoot(.65);
     }
 
     else if (time(0) - startAutoTime < 10 && time(0) - startAutoTime > 6)
     {
-      m_shooter.shoot(.65, .4593);
-      m_shooter.meterWheelsLeftRight(-.4593,-.4539);
-      m_intake.intakeSpinny(.930);
+      m_shooter.shoot(.65);
+      m_shooter.intakeSpinny(.930, .254);
       hasShot = true;
     }
     else {
-      m_shooter.meterWheelsLeftRight(0,0);
-      m_intake.intakeSpinny(0);
-      m_shooter.shoot(0, 0);
+      m_shooter.intakeSpinny(0, 0);
+      m_shooter.shoot(0);
     }
 
   } 
@@ -172,10 +166,10 @@ void Robot::AutonomousPeriodic() {
 
   else if(m_autoSelected == kAutoNameTwoBall){
     
-    m_intake.intakePneumaticOut();
+    m_shooter.intakePneumaticOut();
 
    if(abs(m_driveTrain.getAverageEncoder()) < 35 && !slurpedBall){
-    m_intake.intakeSpinny(.6);
+    m_shooter.intakeSpinny(.6, .254);
     m_driveTrain.drive(-.4593,-.01);
     m_limelight.lightOff();
 
@@ -194,7 +188,7 @@ void Robot::AutonomousPeriodic() {
 
     // else if(m_limelight.getAngleX() < 4 && m_limelight.getAngleX() > -8 && !m_limelight.isTarget()){
     //   m_limelight.lightOn();
-    //   m_intake.intakeSpinny(0);
+    //   m_shooter.intakeSpinny(0);
     //   m_driveTrain.drive(0,.5);
     //   slurpedBall = true;
     // } 
@@ -214,14 +208,14 @@ void Robot::AutonomousPeriodic() {
 
     // Default Auto goes here
     if (time(0) - startAutoTime < 2){
-    m_shooter.shoot(.48, .4593);
+    m_shooter.shoot(.48);
     }
 
     if(time(0) - startAutoTime < 4 && time(0) - startAutoTime > 2)
     {
       m_shooter.meterWheelsLeftRight(-.4593,-.4539);
-      m_intake.intakeSpinny(.930);
-      m_shooter.shoot(.48, .4593);
+      m_shooter.intakeSpinny(.930, .254);
+      m_shooter.shoot(.48);
       hasShot = true;
     }
 
@@ -235,10 +229,10 @@ void Robot::AutonomousPeriodic() {
     else if(abs(m_driveTrain.getAverageEncoder() > 50))
     {
       m_driveTrain.drive(0, 0);
-      m_shooter.shoot(0, 0);
+      m_shooter.shoot(0);
       m_shooter.meterWheelsLeftRight(0,0);
-      m_intake.intakeSpinny(0);
-      m_intake.intakePneumaticOut();
+      m_shooter.intakeSpinny(0, 0);
+      m_shooter.intakePneumaticOut();
     }
     
   }
@@ -251,6 +245,8 @@ void Robot::TeleopInit() {
 }
 
 void Robot::TeleopPeriodic() {
+
+  m_shooter.checkPressed();
 
 frc::SmartDashboard::PutBoolean("lined up", m_limelight.inRange());
 
@@ -267,8 +263,6 @@ else
 m_driveTrain.getRightEncoderValue();
 m_driveTrain.getLeftEncoderValue();
 
-// possible - on the drive train
-// .75
   m_driveTrain.drive(m_driverController.GetLeftY(), - m_driverController.GetRightX());
 
   //m_driveTrain.tankDrive(m_driverController.GetLeftY(), m_driverController.GetRightY());
@@ -276,14 +270,14 @@ m_driveTrain.getLeftEncoderValue();
   if(m_driverController.GetLeftBumper()){
     m_climber.moveStaticDown(.973);
   }
-  else if(m_driverController.GetRightBumper()){ 
-  m_climber.moveStaticUp(.254);
-  }
+  // else if(m_driverController.GetRightBumper()){ 
+  // m_climber.moveStaticUp(.254);
+  // }
   else if(m_driverController.GetBackButton()){
     m_climber.moveStaticDown(-.973);
   }
   else {
-    m_climber.moveStaticUp(0);
+  //  m_climber.moveStaticUp(0);
     m_climber.moveStaticDown(0);
   }
 
@@ -296,9 +290,9 @@ m_driveTrain.getLeftEncoderValue();
     m_climber.pneumaticArmOut();
   }
 
-  else if (m_driverController.GetRightTriggerAxis()){
-    m_climber.moveDynamicUp(.5172);
-   }
+  // else if (m_driverController.GetRightTriggerAxis()){
+  //   m_climber.moveDynamicUp(.5172);
+  //  }
   else if (m_driverController.GetLeftTriggerAxis()){
   m_climber.moveDynamicDown(1);
    }
@@ -307,44 +301,44 @@ m_driveTrain.getLeftEncoderValue();
   }
   else{
     m_climber.moveDynamicDown(0);
-    m_climber.moveDynamicUp(0);
+    // m_climber.moveDynamicUp(0);
   }
 
   // AUX CONTROLLER STUFFS
 
   if (m_auxController.GetAButton()){
-    m_shooter.shoot(.48, .876);
+    m_shooter.shoot(.48);
     //std::cout << m_shooterEncoder.GetVelocity() << std::endl;
     m_driveTrain.brakeMode();
   }
-
   else if (m_auxController.GetYButton()) {
-    m_shooter.shoot(-.3, -1);
+    m_shooter.shoot(-.3);
   }
   else
   {
-   m_shooter.shoot(0, 0);
+   m_shooter.shoot(0);
    m_driveTrain.coastMode();
   }
+
   if (m_auxController.GetBButton()){
-    m_intake.intakeSpinny(.65);
+    m_shooter.intakeSpinny(.65, .35);
   }
   else if (m_auxController.GetXButton()){
-    m_intake.intakeSpinny(-.876);
+    m_shooter.intakeSpinny(-.876, -.254);
   }
   else
   {
-    m_intake.intakeSpinny(0);
+    m_shooter.intakeSpinny(0, 0);
   }
   
   if (m_auxController.GetRightBumper()){
       //could use .toggle();
-    m_intake.intakePneumaticIn();
-    //m_intake.intakeToggle();
+    m_shooter.intakePneumaticIn();
+    //m_shooter.intakeToggle();
   }
 
   if (m_auxController.GetLeftBumper()){  
-    m_intake.intakePneumaticOut();
+    m_shooter.intakePneumaticOut();
   }
 
   if (m_auxController.GetLeftTriggerAxis()){
@@ -355,13 +349,11 @@ m_driveTrain.getLeftEncoderValue();
   }
   else 
   {
-    m_shooter.meterWheelsLeftRight(0,0);
-    m_shooter.bigWheel(0);
+    // m_shooter.meterWheelsLeftRight(0,0);
+    // m_shooter.bigWheel(0);
   }
 
 }
-
-
 
 
 void Robot::DisabledInit() {}

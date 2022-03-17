@@ -56,7 +56,7 @@ double DriveTrain::getLeftEncoderValue(){
 }
 
 double DriveTrain::getRightEncoderValue(){
-    std::cout << m_FRMEncoder.GetPosition() << std::endl;
+   // std::cout << m_FRMEncoder.GetPosition() << std::endl;
     return m_FRMEncoder.GetPosition();
 }
 
