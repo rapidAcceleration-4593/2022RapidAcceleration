@@ -29,7 +29,8 @@ class shooter {
 
         void shoot(double shooterSpeed);
         bool checkShooterSpeed();
-
+        
+        void upToSpeedShoot (double shooterSpeed);
 
         //OLD INTAKE STUFF *RIP*
 
@@ -61,11 +62,6 @@ class shooter {
 
         void meterWheelsLeftRight(double leftspeed, double rightspeed);
 
-        bool checkPressed();
-
-
-
-        
-        
+        bool checkPressed(); 
 
 };

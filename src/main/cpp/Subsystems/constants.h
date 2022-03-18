@@ -36,8 +36,8 @@ class Constants
 
         static const int horizontalLimeMax = 4;
         static const int horizontalLimeMin = -8;
-        static const int verticalLimeMax = 14;
-        static const int verticalLimeMin = -4;
+        static const int verticalLimeMax = 15;
+        static const int verticalLimeMin = 10;
 
         // left p = .1058
         static const int leftP = (0.56937 + .1058)/2;

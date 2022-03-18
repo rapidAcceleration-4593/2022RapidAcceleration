@@ -48,6 +48,8 @@ limelight m_limelight;
 bool hasShot = false;
 bool hasDroveBack = false;
 
+bool sendThatBall = false;
+
 bool slurpedBall = false;
 
 time_t startAutoTime;
@@ -181,9 +183,21 @@ void Robot::AutonomousPeriodic() {
         m_driveTrain.drive(0,.5);
         slurpedBall = true;
     }
-    else if (m_limelight.isTarget() && slurpedBall){
-      m_driveTrain.drive(.25,0);
+    else if (!m_limelight.inRange() && slurpedBall){
+        m_driveTrain.drive(-.45,0);
+        sendThatBall = true; 
     }
+    else if (m_limelight.inRange()){
+      //m_shooter.shoot(.45);
+      m_driveTrain.drive(0,0);
+      
+    }
+    // else if(sendThatBall && m_shooter.) {
+    //   m_shooter.shoot(.45);
+    //   m_driveTrain.drive(0,0);
+    //   m_shooter.meterWheelsLeftRight(-.254,-.254);
+    //   m_shooter.bigWheel(.4);
+    // }
 
 
     // else if(m_limelight.getAngleX() < 4 && m_limelight.getAngleX() > -8 && !m_limelight.isTarget()){
@@ -194,8 +208,9 @@ void Robot::AutonomousPeriodic() {
     // } 
 
   else {
-    m_driveTrain.drive(0,0);
+    //m_driveTrain.drive(0,0);
     m_limelight.lightOff();
+    m_shooter.shoot(0);
   }
 
 }
@@ -309,6 +324,7 @@ m_driveTrain.getLeftEncoderValue();
   if (m_auxController.GetAButton()){
     m_shooter.shoot(.48);
     //std::cout << m_shooterEncoder.GetVelocity() << std::endl;
+    
     m_driveTrain.brakeMode();
   }
   else if (m_auxController.GetYButton()) {
