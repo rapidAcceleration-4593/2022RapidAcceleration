@@ -34,10 +34,10 @@ class Constants
         static const int climberPneumaticUp = 4;
         static const int climberPneumaticDown = 5;
 
-        static const int horizontalLimeMax = 4;
-        static const int horizontalLimeMin = -8;
-        static const int verticalLimeMax = 15;
-        static const int verticalLimeMin = 10;
+        static const int horizontalLimeMax = 6;
+        static const int horizontalLimeMin = -6;
+        static const int verticalLimeMax = 10;
+        static const int verticalLimeMin = 0;
 
         // left p = .1058
         static const int leftP = (0.56937 + .1058)/2;

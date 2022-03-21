@@ -11,8 +11,13 @@ shooter::~shooter(){
 void shooter::shoot(double shooterSpeed){
     m_leftShooterMotor.Set(-shooterSpeed);
     m_rightShooterMotor.Set(shooterSpeed);
-    m_sushiWheels.Set(shooterSpeed*2);
 
+if (shooterSpeed == 0){
+    m_sushiWheels.Set(0);
+}
+else{
+        m_sushiWheels.Set(-1);
+}
 //    if (checkShooterSpeed() == true){
 //     m_sushiWheels.Set(-.876);
 //     bigWheel(.254);
@@ -33,7 +38,7 @@ void shooter::upToSpeedShoot(double shooterSpeed){
 
    if (checkShooterSpeed() == true){
     m_sushiWheels.Set(-.876);
-    bigWheel(.254);
+    bigWheel(.25);
     meterWheelsLeftRight(-.254, -.254);
    }
    else{

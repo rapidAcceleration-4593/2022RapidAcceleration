@@ -32,7 +32,7 @@ DriveTrain::DriveTrain()
     m_RRMPID.SetD(Constants::rightD);        
     m_RRMPID.SetFF(Constants::rightFF);
 
-
+    m_diffDrive.SetDeadband(.1);
 
 }
 
@@ -63,6 +63,8 @@ double DriveTrain::getRightEncoderValue(){
 void DriveTrain::resetEncoder(){
     m_FLMEncoder.SetPosition(0);
     m_FRMEncoder.SetPosition(0);
+    m_RLMEncoder.SetPosition(0);
+    m_RRMEncoder.SetPosition(0);
 }
 
 double DriveTrain::getAverageEncoder()
