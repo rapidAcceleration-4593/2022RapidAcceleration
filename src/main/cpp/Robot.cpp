@@ -52,6 +52,8 @@ bool sendThatBall = false;
 
 bool slurpedBall = false;
 
+bool shooting = false;
+
 time_t startAutoTime;
 
 void Robot::RobotInit() {
@@ -138,7 +140,7 @@ void Robot::AutonomousPeriodic() {
     {
       m_driveTrain.drive(0, 0);
       m_shooter.shoot(0);
-      m_shooter.intakeSpinny(0, 0);
+      m_shooter.intakeSpinny(0, 0, shooting);
       m_shooter.intakePneumaticOut();
     }
   }
@@ -162,7 +164,7 @@ void Robot::AutonomousPeriodic() {
       hasShot = true;
     }
     else {
-      m_shooter.intakeSpinny(0, 0);
+      m_shooter.intakeSpinny(0, 0, shooting);
       m_shooter.shoot(0);
     }
 
@@ -176,7 +178,7 @@ void Robot::AutonomousPeriodic() {
     m_shooter.intakePneumaticOut();
 
    if(abs(m_driveTrain.getAverageEncoder()) < 35 && !slurpedBall){
-    m_shooter.intakeSpinny(.6, .254);
+    m_shooter.intakeSpinny(.6, .254, shooting);
     m_driveTrain.drive(-.4593,-.01);
 
     //std::cout << m_driveTrain.getRightEncoderValue() << std::endl;
@@ -274,7 +276,7 @@ void Robot::AutonomousPeriodic() {
       m_driveTrain.drive(0, 0);
       m_shooter.shoot(0);
       m_shooter.meterWheelsLeftRight(0,0);
-      m_shooter.intakeSpinny(0, 0);
+      m_shooter.intakeSpinny(0, 0, shooting);
       m_shooter.bigWheel(0);
       m_shooter.intakePneumaticOut();
     }
@@ -344,29 +346,32 @@ frc::SmartDashboard::PutBoolean("lined up", m_limelight.inRange());
 
 
   if (m_auxController.GetAButton()){
-    m_shooter.shoot(.34);
+    //.34
+    m_shooter.shoot(1175);
+    shooting = true;
     //std::cout << m_shooterEncoder.GetVelocity() << std::endl;
     //m_shooter.bigWheel(.45);
     //m_driveTrain.brakeMode();
   }
   else if (m_auxController.GetYButton()) {
-    m_shooter.shoot(-.3);
+    m_shooter.shoot(-100);
   }
   else
   {
    m_shooter.shoot(0);
+   shooting = false;
    // m_driveTrain.coastMode();
   }
 
   if (m_auxController.GetBButton()){
-    m_shooter.intakeSpinny(.65, .25);
+    m_shooter.intakeSpinny(.65, .20, shooting);
   }
   else if (m_auxController.GetXButton()){
-    m_shooter.intakeSpinny(-.876, -.254);
+    m_shooter.intakeSpinny(-.876, -.254, shooting);
   }
-  else
+  else if(!m_auxController.GetAButtonPressed())
   {
-    m_shooter.intakeSpinny(0, 0);
+    m_shooter.intakeSpinny(0, 0, shooting);
   }
 
   if (m_auxController.GetRightBumper()){

@@ -1,7 +1,6 @@
 {
   "SysId": {
-    "Analysis Type": "Drivetrain",
-    "AnalyzerJSONLocation": "C:\\Users\\FIRST_Brogramming\\Desktop\\Sir Lance-a-bot\\2022\\Characterization2022\\sysid_data20220227-112005.json",
+    "Analysis Type": "General Mechanism",
     "NetworkTables Settings": {
       "serverTeam": "4593"
     },

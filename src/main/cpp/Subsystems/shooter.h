@@ -10,7 +10,10 @@
 #include <frc/PneumaticsBase.h>
 #include <frc/DoubleSolenoid.h>
 #include <frc/DigitalInput.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/controller/BangBangController.h>
 #include <iostream>
+
 
 class shooter {
 
@@ -18,14 +21,18 @@ class shooter {
         shooter();
         ~shooter();
 
-        
-        
         frc::PWMSparkMax m_sushiWheels{1};
 
         rev::CANSparkMax m_leftShooterMotor {Constants::shooterLeft, rev::CANSparkMax::MotorType::kBrushless};
         rev::CANSparkMax m_rightShooterMotor {Constants::shooterRight, rev::CANSparkMax::MotorType::kBrushless};
         
-        rev::SparkMaxRelativeEncoder m_shooterEncoder = m_leftShooterMotor.GetEncoder();
+        rev::SparkMaxRelativeEncoder m_leftShooterEncoder = m_leftShooterMotor.GetEncoder();
+        rev::SparkMaxRelativeEncoder m_rightShooterEncoder = m_rightShooterMotor.GetEncoder(); 
+
+        rev::SparkMaxPIDController m_leftShooterPID = m_leftShooterMotor.GetPIDController();
+        rev::SparkMaxPIDController m_rightShooterPID = m_rightShooterMotor.GetPIDController();
+
+        void jesusShootPlz();
 
         void shoot(double shooterSpeed);
         bool checkShooterSpeed();
@@ -43,6 +50,8 @@ class shooter {
         frc::DoubleSolenoid m_leftIntakePneumatics {Constants::PH, frc::PneumaticsModuleType::REVPH,
                                                     Constants::intakeForwardLeft, Constants::intakeBackwardLeft};
 
+
+
         frc::DigitalInput m_meterSwitch {0};
 
         // maybe need to be like CANTalonSRX or WPI_TalonSrx (need to be on CAN not PWM)
@@ -58,7 +67,7 @@ class shooter {
 
         void intakeSpinBigWheel(double spinnySpeed, double bigSpeed);
         
-        void intakeSpinny(double speed, double meterSpeed);
+        void intakeSpinny(double speed, double meterSpeed, bool shooting);
 
         void meterWheelsLeftRight(double leftspeed, double rightspeed);
 
