@@ -30,7 +30,7 @@ std::cout << m_leftShooterEncoder.GetVelocity() << std::endl;
 frc::SmartDashboard::PutNumber("shooter velocity", -m_leftShooterEncoder.GetVelocity());
 
 if (shooterSpeed == 0){
-    m_sushiWheels.Set(0);
+    // m_sushiWheels.Set(0);
     m_leftShooterMotor.Set(0);
     m_rightShooterMotor.Set(0);
     // m_bigWheel.Set(0);
@@ -40,10 +40,10 @@ if (shooterSpeed == 0){
 else{
     m_rightShooterPID.SetReference(shooterSpeed, rev::ControlType::kVelocity);
     m_leftShooterPID.SetReference(-shooterSpeed, rev::ControlType::kVelocity);
-    m_sushiWheels.Set(-1);
-    if(abs(m_leftShooterEncoder.GetVelocity()) > shooterSpeed - 100)
+    // m_sushiWheels.Set(-1);
+    if(abs(m_leftShooterEncoder.GetVelocity()) > shooterSpeed - 100 && shooterSpeed > 1)
     {
-        m_bigWheel.Set(-.8); 
+        m_bigWheel.Set(-.69); 
         m_meterLeft.Set(ControlMode::PercentOutput, -.254);
         m_meterRight.Set(ControlMode::PercentOutput, -.254);
     }
@@ -68,12 +68,12 @@ void shooter::upToSpeedShoot(double shooterSpeed){
     //m_sushiWheels.Set(shooterSpeed*2);
 
    if (checkShooterSpeed() == true){
-    m_sushiWheels.Set(-.876);
+    // m_sushiWheels.Set(-.876);
     bigWheel(.25);
     meterWheelsLeftRight(-.254, -.254);
    }
    else{
-       m_sushiWheels.Set(0);
+       // m_sushiWheels.Set(0);
        bigWheel(0);
        meterWheelsLeftRight(0,0);
    }
@@ -134,8 +134,9 @@ void shooter::bigWheel(double speed){
 }
 
 bool shooter::checkPressed(){
-    std::cout << !m_meterSwitch.Get() << std::endl; 
-    return !m_meterSwitch.Get();    
+    // std::cout << !m_meterSwitch.Get() << std::endl; 
+    // return !m_meterSwitch.Get(); 
+    return false;  
 }
 
 void shooter::meterWheelsLeftRight(double leftspeed,double rightspeed){

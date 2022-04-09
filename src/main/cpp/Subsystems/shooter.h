@@ -21,7 +21,7 @@ class shooter {
         shooter();
         ~shooter();
 
-        frc::PWMSparkMax m_sushiWheels{1};
+        // frc::PWMSparkMax m_sushiWheels{1};
 
         rev::CANSparkMax m_leftShooterMotor {Constants::shooterLeft, rev::CANSparkMax::MotorType::kBrushless};
         rev::CANSparkMax m_rightShooterMotor {Constants::shooterRight, rev::CANSparkMax::MotorType::kBrushless};
@@ -52,7 +52,7 @@ class shooter {
 
 
 
-        frc::DigitalInput m_meterSwitch {0};
+        // frc::DigitalInput m_meterSwitch {0};
 
         // maybe need to be like CANTalonSRX or WPI_TalonSrx (need to be on CAN not PWM)
 

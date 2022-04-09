@@ -59,6 +59,8 @@ bool slurpedBall = false;
 
 bool shooting = false;
 
+bool manualOverride = false;
+
 time_t startAutoTime;
 
 void Robot::RobotInit() {
@@ -347,12 +349,16 @@ frc::SmartDashboard::PutBoolean("lined up", m_limelight.inRange());
 
 
   // AUX CONTROLLER STUFFS
-
+   if (m_auxController.GetLeftTriggerAxis()){
+    m_shooter.meterWheelsLeftRight(-.118,-.254);
+    m_shooter.bigWheel(.35);
+    manualOverride = true;
+  }
 
 
   if (m_auxController.GetAButton()){
     //.34
-    m_shooter.shoot(1000);
+    m_shooter.shoot(2000);
     shooting = true;
     //std::cout << m_shooterEncoder.GetVelocity() << std::endl;
     //m_shooter.bigWheel(.45);
@@ -361,23 +367,20 @@ frc::SmartDashboard::PutBoolean("lined up", m_limelight.inRange());
   else if (m_auxController.GetYButton()) {
     m_shooter.shoot(-100);
   }
-  else
-  {
-   m_shooter.shoot(0);
-   shooting = false;
-   // m_driveTrain.coastMode();
-  }
-
-  if (m_auxController.GetBButton()){
+  else if (m_auxController.GetBButton()){
     m_shooter.intakeSpinny(.65, .20, shooting);
   }
   else if (m_auxController.GetXButton()){
     m_shooter.intakeSpinny(-.876, -.254, shooting);
   }
-  else if(!m_auxController.GetAButtonPressed())
+  else if(!manualOverride)
   {
-    m_shooter.intakeSpinny(0, 0, shooting);
+   m_shooter.shoot(0);
+   m_shooter.intakeSpinny(0, 0, shooting);
+   shooting = false;
+   // m_driveTrain.coastMode();
   }
+
 
   if (m_auxController.GetRightBumper()){
       //could use .toggle();
@@ -389,17 +392,7 @@ frc::SmartDashboard::PutBoolean("lined up", m_limelight.inRange());
     m_shooter.intakePneumaticOut();
   }
 
-  if (m_auxController.GetLeftTriggerAxis()){
-
-   m_shooter.meterWheelsLeftRight(-.118,-.254);
-   m_shooter.bigWheel(.35);
-
-  }
-  else
-  {
-    // m_shooter.meterWheelsLeftRight(0,0);
-    // m_shooter.bigWheel(0);
-  }
+  manualOverride = false;
 
 }
 
