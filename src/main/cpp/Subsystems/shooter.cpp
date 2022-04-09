@@ -8,15 +8,15 @@ m_rightShooterMotor.RestoreFactoryDefaults();
 // m_rightShooterMotor.SetInverted(false);
 // m_rightShooterMotor.Follow(m_leftShooterMotor, true);
 
-m_leftShooterPID.SetP(6e-5);
-m_leftShooterPID.SetI(1e-6);
-m_leftShooterPID.SetD(0);
-m_leftShooterPID.SetFF(.000015);
+m_leftShooterPID.SetP(Constants::shooterP);
+m_leftShooterPID.SetI(Constants::shooterI);
+m_leftShooterPID.SetD(Constants::shooterD);
+m_leftShooterPID.SetFF(Constants::shooterFF);
 
-m_rightShooterPID.SetP(6e-5);
-m_rightShooterPID.SetI(1e-6);
-m_rightShooterPID.SetD(0);
-m_rightShooterPID.SetFF(.000015);
+m_rightShooterPID.SetP(Constants::shooterP);
+m_rightShooterPID.SetI(Constants::shooterI);
+m_rightShooterPID.SetD(Constants::shooterD);
+m_rightShooterPID.SetFF(Constants::shooterFF);
 
 }
 
@@ -43,7 +43,7 @@ else{
     // m_sushiWheels.Set(-1);
     if(abs(m_leftShooterEncoder.GetVelocity()) > shooterSpeed - 100 && shooterSpeed > 1)
     {
-        m_bigWheel.Set(-.69); 
+        m_bigWheel.Set(-.75); 
         m_meterLeft.Set(ControlMode::PercentOutput, -.254);
         m_meterRight.Set(ControlMode::PercentOutput, -.254);
     }
@@ -92,6 +92,7 @@ bool shooter::checkShooterSpeed(){
     // else {
     //     return true;
     // }
+    return true;
 }
 
 void shooter::intakePneumaticIn(){

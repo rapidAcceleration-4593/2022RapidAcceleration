@@ -39,6 +39,11 @@ class Constants
         static const int verticalLimeMax = 10;
         static const int verticalLimeMin = 0;
 
+        static constexpr double shooterP = 15e-5;
+        static constexpr double shooterI = 1e-6;
+        static constexpr double shooterD = 10;
+        static constexpr double shooterFF = .000015;
+
         // left p = .1058
         static const int leftP = (0.56937 + .1058)/2;
         static const int leftI = 0;
