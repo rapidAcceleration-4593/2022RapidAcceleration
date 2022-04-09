@@ -28,6 +28,8 @@
 #include "networktables/NetworkTableValue.h"
 #include "wpi/span.h"
 
+
+
 #include "Subsystems/constants.h"
 #include "Subsystems/DriveTrain.h"
 #include "Subsystems/shooter.h"
@@ -39,6 +41,9 @@
 
 frc::XboxController m_driverController{0};
 frc::XboxController m_auxController{1};
+
+
+frc::SlewRateLimiter<units::volts> m_driveLimiter{.5_V / 1_s};
 
 DriveTrain m_driveTrain;
 shooter m_shooter;
@@ -151,7 +156,7 @@ void Robot::AutonomousPeriodic() {
   else if (m_autoSelected == kAutoNameNoDrive){
 
     if (time(0) - startAutoTime < 2){
-      m_shooter.shoot(.5);
+      m_shooter.shoot(2500);
     }
 
     else if (time(0) - startAutoTime < 4 && time(0) - startAutoTime > 2)
@@ -160,7 +165,7 @@ void Robot::AutonomousPeriodic() {
       m_shooter.meterWheelsLeftRight(-.4593,-.4539);
       // m_shooter.intakeSpinny(.930, .254);
       m_shooter.bigWheel(.3);
-      m_shooter.shoot(.5);
+      m_shooter.shoot(2500);
       hasShot = true;
     }
     else {
@@ -196,7 +201,7 @@ void Robot::AutonomousPeriodic() {
     //     m_driveTrain.drive(0,0);
 
     else if (time(0) - startAutoTime < 8){
-          m_shooter.shoot(.41);
+          m_shooter.shoot(2000);
           //m_driveTrain.drive(0,0);
 
         // else if (time(0) - startAutoTime < 15 && time(0) - startAutoTime > 7)
@@ -215,7 +220,7 @@ void Robot::AutonomousPeriodic() {
       m_shooter.meterWheelsLeftRight(-.4593,-.4539);
       // m_shooter.intakeSpinny(.930, .254);
       m_shooter.bigWheel(.3);
-      m_shooter.shoot(.41);
+      m_shooter.shoot(2000);
       m_shooter.intakePneumaticIn();
     }
     // else if (sendThatBall = true){
@@ -252,7 +257,7 @@ void Robot::AutonomousPeriodic() {
 
     // Default Auto goes here
     if (time(0) - startAutoTime < 2){
-    m_shooter.shoot(.35);
+    m_shooter.shoot(1100);
     }
 
     if(time(0) - startAutoTime < 4 && time(0) - startAutoTime > 2)
@@ -260,7 +265,7 @@ void Robot::AutonomousPeriodic() {
       m_shooter.meterWheelsLeftRight(-.4593,-.4539);
       // m_shooter.intakeSpinny(.930, .254);
       m_shooter.bigWheel(.3);
-      m_shooter.shoot(.35);
+      m_shooter.shoot(1200);
       hasShot = true;
     }
 
@@ -347,7 +352,7 @@ frc::SmartDashboard::PutBoolean("lined up", m_limelight.inRange());
 
   if (m_auxController.GetAButton()){
     //.34
-    m_shooter.shoot(1175);
+    m_shooter.shoot(1000);
     shooting = true;
     //std::cout << m_shooterEncoder.GetVelocity() << std::endl;
     //m_shooter.bigWheel(.45);

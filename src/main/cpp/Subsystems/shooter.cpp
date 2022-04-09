@@ -112,14 +112,15 @@ void shooter::intakeToggle(){
 void shooter::intakeSpinny(double speed, double meterSpeed, bool shooting){
     m_intake.Set(ControlMode::PercentOutput, speed);
 
-    m_meterLeft.Set(ControlMode::PercentOutput, -meterSpeed);
-    m_meterRight.Set(ControlMode::PercentOutput, -meterSpeed);
+
 
     if(checkPressed() == true && !shooting){
         m_bigWheel.Set(0);      
     }
     else{
         m_bigWheel.Set(-meterSpeed);
+        m_meterLeft.Set(ControlMode::PercentOutput, -meterSpeed);
+        m_meterRight.Set(ControlMode::PercentOutput, -meterSpeed);
     }
     // else if (!shooting){
     //     m_bigWheel.Set(0);

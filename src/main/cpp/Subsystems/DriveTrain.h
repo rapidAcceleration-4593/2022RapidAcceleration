@@ -1,6 +1,7 @@
 #pragma once
 
 #include <frc/drive/DifferentialDrive.h>
+#include<frc/filter/SlewRateLimiter.h>
 #include "rev/CANSparkMax.h"
 #include "constants.h"
 #include <iostream>
@@ -30,6 +31,7 @@ class DriveTrain {
 
         void coastMode();
         void brakeMode();
+
 
         rev::SparkMaxPIDController m_FLMPID = m_FLM.GetPIDController();
         rev::SparkMaxPIDController m_RLMPID = m_RLM.GetPIDController();
