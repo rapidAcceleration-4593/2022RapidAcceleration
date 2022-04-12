@@ -32,8 +32,7 @@ DriveTrain::DriveTrain()
     m_RRMPID.SetD(Constants::rightD);        
     m_RRMPID.SetFF(Constants::rightFF);
 
-    m_diffDrive.SetDeadband(.15) ;
-
+    m_diffDrive.SetDeadband(.15);
 }
 
 DriveTrain::~DriveTrain()

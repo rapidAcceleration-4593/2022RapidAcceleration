@@ -15,14 +15,9 @@ class climber {
         climber();
         ~climber();
 
-        //frc::PWMSparkMax m_staticUp{1};
-        //frc::PWMSparkMax m_dynamicUp{0};
+        TalonSRX m_static{Constants::staticPort};
 
-        // m_staticUp{Constants::staticUp};
-        TalonSRX m_staticDown{Constants::staticDown};
-
-        //VictorSPX m_dynamicUp{Constants::dynamicUp};
-        TalonSRX m_dynamicDown{Constants::dynamicDown};
+        TalonSRX m_dynamic{Constants::dynamicPort};
 
         frc::DoubleSolenoid m_climberPneumatic{Constants::PH, frc::PneumaticsModuleType::REVPH, 
                                                 Constants::climberPneumaticUp, Constants::climberPneumaticDown};
@@ -30,9 +25,6 @@ class climber {
         void pneumaticArmOut();
         void pneumaticArmIn();
         
-       // void moveStaticUp(double speed);
-        void moveStaticDown(double speed);
-       // void moveDynamicUp(double speed);
-        void moveDynamicDown(double speed);
-
+        void moveStatic(double speed);
+        void moveDynamic(double speed);
 };

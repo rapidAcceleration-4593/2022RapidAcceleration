@@ -10,8 +10,6 @@
 #include "wpi/span.h"
 
 class limelight {
-
-    
     
     public:
         limelight();

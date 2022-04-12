@@ -42,8 +42,4 @@ class DriveTrain {
         rev::SparkMaxRelativeEncoder m_RLMEncoder = m_RLM.GetEncoder();
         rev::SparkMaxRelativeEncoder m_FRMEncoder = m_FRM.GetEncoder();
         rev::SparkMaxRelativeEncoder m_RRMEncoder = m_RRM.GetEncoder();
-
-        
-
-
 };

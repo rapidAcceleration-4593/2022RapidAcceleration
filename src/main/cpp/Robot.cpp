@@ -7,7 +7,6 @@
 #include <fmt/core.h>
 
 #include <frc/smartdashboard/SmartDashboard.h>
-
 #include <frc/motorcontrol/MotorControllerGroup.h>
 #include <frc/XboxController.h>
 #include <frc/TimedRobot.h>
@@ -20,15 +19,12 @@
 #include <frc/DoubleSolenoid.h>
 #include "ctre/Phoenix.h"
 #include <cameraserver/CameraServer.h>
-
 #include "frc/smartdashboard/Smartdashboard.h"
 #include "networktables/NetworkTable.h"
 #include "networktables/NetworkTableInstance.h"
 #include "networktables/NetworkTableEntry.h"
 #include "networktables/NetworkTableValue.h"
 #include "wpi/span.h"
-
-
 
 #include "Subsystems/constants.h"
 #include "Subsystems/DriveTrain.h"
@@ -39,11 +35,11 @@
 #include <iostream>
 #include <ctime>
 
+
 frc::XboxController m_driverController{0};
 frc::XboxController m_auxController{1};
 
-
-frc::SlewRateLimiter<units::volts> m_driveLimiter{.5_V / 1_s};
+frc::SlewRateLimiter<units::volts> m_driveLimiter{.5_V / 1_s}; // currently unused... 
 
 DriveTrain m_driveTrain;
 shooter m_shooter;
@@ -57,7 +53,7 @@ bool sendThatBall = false;
 
 bool slurpedBall = false;
 
-bool shooting = false;
+bool shooting = false; // probably unneeded
 
 bool manualOverride = false;
 
@@ -70,7 +66,7 @@ void Robot::RobotInit() {
   m_chooser.AddOption(kAutoNameTwoBall, kAutoNameTwoBall);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
-m_driveTrain.resetEncoder();
+  m_driveTrain.resetEncoder();
 
 //frc::CameraServer::StartAutomaticCapture();
 
@@ -103,12 +99,6 @@ void Robot::AutonomousInit() {
   //     kAutoNameDefault);
   fmt::print("Auto selected: {}\n", m_autoSelected);
 
-  if (m_autoSelected == kAutoNameCustom) {
-    // Custom Auto goes here
-  } else {
-    // Default Auto goes here
-  }
-
   m_driveTrain.resetEncoder();
   m_shooter.intakePneumaticIn();
   startAutoTime = time(0);
@@ -117,6 +107,7 @@ void Robot::AutonomousInit() {
 
 void Robot::AutonomousPeriodic() {
 
+  // when shoot is called, can remove all of the other intake feeding things
 
   if (m_autoSelected == kAutoNameCustom) {
     // Custom Auto goes here
@@ -147,7 +138,7 @@ void Robot::AutonomousPeriodic() {
     {
       m_driveTrain.drive(0, 0);
       m_shooter.shoot(0);
-      m_shooter.intakeSpinny(0, 0, shooting);
+      m_shooter.intakeSpinny(0, 0);
       m_shooter.intakePneumaticOut();
     }
   }
@@ -171,7 +162,7 @@ void Robot::AutonomousPeriodic() {
       hasShot = true;
     }
     else {
-      m_shooter.intakeSpinny(0, 0, shooting);
+      m_shooter.intakeSpinny(0, 0);
       m_shooter.shoot(0);
     }
 
@@ -185,7 +176,7 @@ void Robot::AutonomousPeriodic() {
     m_shooter.intakePneumaticOut();
 
    if(abs(m_driveTrain.getAverageEncoder()) < 35 && !slurpedBall){
-    m_shooter.intakeSpinny(.6, .254, shooting);
+    m_shooter.intakeSpinny(.6, .254);
     m_driveTrain.drive(-.4593,-.01);
 
     //std::cout << m_driveTrain.getRightEncoderValue() << std::endl;
@@ -250,14 +241,9 @@ void Robot::AutonomousPeriodic() {
   }
 
 }
-
   else {
-
-
     // THIS IS A GOOD ONE
 
-
-    // Default Auto goes here
     if (time(0) - startAutoTime < 2){
     m_shooter.shoot(1100);
     }
@@ -283,7 +269,7 @@ void Robot::AutonomousPeriodic() {
       m_driveTrain.drive(0, 0);
       m_shooter.shoot(0);
       m_shooter.meterWheelsLeftRight(0,0);
-      m_shooter.intakeSpinny(0, 0, shooting);
+      m_shooter.intakeSpinny(0, 0);
       m_shooter.bigWheel(0);
       m_shooter.intakePneumaticOut();
     }
@@ -294,33 +280,27 @@ void Robot::AutonomousPeriodic() {
 
 void Robot::TeleopInit() {
   m_driveTrain.coastMode();
-
 }
 
 void Robot::TeleopPeriodic() {
 
-// m_shooter.checkPressed();
-
-frc::SmartDashboard::PutBoolean("lined up", m_limelight.inRange());
-
-// LIMELIGHT STUFF
+  // limelight stuff
+  frc::SmartDashboard::PutBoolean("lined up", m_limelight.inRange());
 
   m_driveTrain.drive(m_driverController.GetLeftY(), - m_driverController.GetRightX());
 
-  //m_driveTrain.tankDrive(m_driverController.GetLeftY(), m_driverController.GetRightY());
-
   if(m_driverController.GetRightBumper()){
-    m_climber.moveStaticDown(.973);
+    m_climber.moveStatic(.973);
   }
   // else if(m_driverController.GetRightBumper()){
-  // m_climber.moveStaticUp(.254);
-  // }
+  // m_climber.moveStatic(.254);
+  // } 
+  // should that else if be there?
   else if(m_driverController.GetLeftBumper()){
-    m_climber.moveStaticDown(-.973);
+    m_climber.moveStatic(-.973);
   }
   else {
-  //  m_climber.moveStaticUp(0);
-    m_climber.moveStaticDown(0);
+    m_climber.moveStatic(0);
   }
 
     // this is dynamic arm
@@ -331,19 +311,18 @@ frc::SmartDashboard::PutBoolean("lined up", m_limelight.inRange());
   else if(m_driverController.GetBButton()){
     m_climber.pneumaticArmOut();
   }
-
   // else if (m_driverController.GetRightTriggerAxis()){
   //   m_climber.moveDynamicUp(.5172);
   //  }
+  // same with this else if
   else if (m_driverController.GetRightTriggerAxis()){
-  m_climber.moveDynamicDown(1);
+  m_climber.moveDynamic(1);
    }
   else if (m_driverController.GetLeftTriggerAxis()){
-  m_climber.moveDynamicDown(-1);
+  m_climber.moveDynamic(-1);
   }
   else{
-    m_climber.moveDynamicDown(0);
-    // m_climber.moveDynamicUp(0);
+    m_climber.moveDynamic(0);
   }
 
 
@@ -357,35 +336,29 @@ frc::SmartDashboard::PutBoolean("lined up", m_limelight.inRange());
 
 
   if (m_auxController.GetAButton()){
-    //.34
     m_shooter.shoot(2000);
     shooting = true;
-    //std::cout << m_shooterEncoder.GetVelocity() << std::endl;
-    //m_shooter.bigWheel(.45);
-    //m_driveTrain.brakeMode();
+    // m_driveTrain.brakeMode();
   }
   else if (m_auxController.GetYButton()) {
     m_shooter.shoot(-100);
   }
   else if (m_auxController.GetBButton()){
-    m_shooter.intakeSpinny(.65, .20, shooting);
+    m_shooter.intakeSpinny(.65, .20);
   }
   else if (m_auxController.GetXButton()){
-    m_shooter.intakeSpinny(-.876, -.254, shooting);
+    m_shooter.intakeSpinny(-.876, -.254);
   }
   else if(!manualOverride)
   {
    m_shooter.shoot(0);
-   m_shooter.intakeSpinny(0, 0, shooting);
+   m_shooter.intakeSpinny(0, 0);
    shooting = false;
    // m_driveTrain.coastMode();
   }
 
-
   if (m_auxController.GetRightBumper()){
-      //could use .toggle();
     m_shooter.intakePneumaticIn();
-    //m_shooter.intakeToggle();
   }
 
   if (m_auxController.GetLeftBumper()){
@@ -393,7 +366,6 @@ frc::SmartDashboard::PutBoolean("lined up", m_limelight.inRange());
   }
 
   manualOverride = false;
-
 }
 
 

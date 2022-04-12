@@ -24,6 +24,7 @@ class Robot : public frc::TimedRobot {
 
  private:
   frc::SendableChooser<std::string> m_chooser;
+  // strings should have better variable names, but Mat doesn't really want to mess with them at this point...
   const std::string kAutoNameDefault = "GOOD AUTO";
   const std::string kAutoNameCustom = "BAD AUTO";
   const std::string kAutoNameNoDrive = "NO DRIVE AUTO";
