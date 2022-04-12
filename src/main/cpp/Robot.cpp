@@ -110,28 +110,17 @@ void Robot::AutonomousPeriodic() {
   // when shoot is called, can remove all of the other intake feeding things
 
   if (m_autoSelected == kAutoNameCustom) {
-    // Custom Auto goes here
 
     // THIS IS THE KINDA BAD / TURNING AUTO
 
-    if (time(0) - startAutoTime < 2){
-    m_shooter.shoot(.48);
-    }
-
-    if(time(0) - startAutoTime < 4 && time(0) - startAutoTime > 2)
-    {
-      //m_shooter.intakeSpinny(.930, .254);
-      m_shooter.meterWheelsLeftRight(-.4593,-.4539);
-      m_shooter.bigWheel(.3);
-      m_shooter.shoot(.48);
-      hasShot = true;
+    if (time(0) - startAutoTime < 4){
+    m_shooter.shoot(2000);
     }
 
     if(abs(m_driveTrain.getAverageEncoder()) < 32 && time(0) - startAutoTime > 4)
     {
       m_driveTrain.tankDrive(.4593, .6);
-     // m_leftShooterMotor.Set(0);
-      //m_rightShooterMotor.Set(0);
+      m_shooter.shoot(0);
       hasDroveBack = true;
     }
     else if(abs(m_driveTrain.getAverageEncoder() > 30))
@@ -148,18 +137,8 @@ void Robot::AutonomousPeriodic() {
 
   else if (m_autoSelected == kAutoNameNoDrive){
 
-    if (time(0) - startAutoTime < 2){
+    if (time(0) - startAutoTime < 5){
       m_shooter.shoot(2500);
-    }
-
-    else if (time(0) - startAutoTime < 4 && time(0) - startAutoTime > 2)
-    {
-
-      m_shooter.meterWheelsLeftRight(-.4593,-.4539);
-      // m_shooter.intakeSpinny(.930, .254);
-      m_shooter.bigWheel(.3);
-      m_shooter.shoot(2500);
-      hasShot = true;
     }
     else {
       m_shooter.intakeSpinny(0, 0);
@@ -170,7 +149,6 @@ void Robot::AutonomousPeriodic() {
 
   // TWO BALL
 
-
   else if(m_autoSelected == kAutoNameTwoBall){
 
     m_shooter.intakePneumaticOut();
@@ -178,12 +156,9 @@ void Robot::AutonomousPeriodic() {
    if(abs(m_driveTrain.getAverageEncoder()) < 35 && !slurpedBall){
     m_shooter.intakeSpinny(.6, .254);
     m_driveTrain.drive(-.4593,-.01);
-
-    //std::cout << m_driveTrain.getRightEncoderValue() << std::endl;
    }
-
     else if (abs(m_driveTrain.getRightEncoderValue()) < 61){
-        m_driveTrain.drive(0,.5);
+        m_driveTrain.drive(0, .5);
         slurpedBall = true;
     }
     else if (!m_limelight.inRange() && slurpedBall){
@@ -210,8 +185,6 @@ void Robot::AutonomousPeriodic() {
     }
     if (time(0) - startAutoTime < 20 && time(0) - startAutoTime > 8){
       m_driveTrain.drive(0,0);
-      m_shooter.meterWheelsLeftRight(-.4593,-.4539);
-      // m_shooter.intakeSpinny(.930, .254);
       m_shooter.bigWheel(.3);
       m_shooter.shoot(2000);
       m_shooter.intakePneumaticIn();
@@ -244,38 +217,23 @@ void Robot::AutonomousPeriodic() {
   else {
     // THIS IS A GOOD ONE
 
-    if (time(0) - startAutoTime < 2){
-    m_shooter.shoot(1100);
-    }
-
-    if(time(0) - startAutoTime < 4 && time(0) - startAutoTime > 2)
-    {
-      m_shooter.meterWheelsLeftRight(-.4593,-.4539);
-      // m_shooter.intakeSpinny(.930, .254);
-      m_shooter.bigWheel(.3);
-      m_shooter.shoot(1200);
-      hasShot = true;
+    if (time(0) - startAutoTime < 4){
+      m_shooter.shoot(1100);
     }
 
     if(abs(m_driveTrain.getAverageEncoder()) < 50 && time(0) - startAutoTime > 4)
     {
       m_driveTrain.drive(.5172, 0);
-     // m_leftShooterMotor.Set(0);
-      //m_rightShooterMotor.Set(0);
+      m_shooter.shoot(0);
       hasDroveBack = true;
     }
     else if(abs(m_driveTrain.getAverageEncoder() > 50))
     {
       m_driveTrain.drive(0, 0);
       m_shooter.shoot(0);
-      m_shooter.meterWheelsLeftRight(0,0);
-      m_shooter.intakeSpinny(0, 0);
-      m_shooter.bigWheel(0);
       m_shooter.intakePneumaticOut();
     }
-
   }
-
 }
 
 void Robot::TeleopInit() {
