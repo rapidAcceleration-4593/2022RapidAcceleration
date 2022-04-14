@@ -32,9 +32,9 @@ class Constants
         static const int climberPneumaticUp = 4;
         static const int climberPneumaticDown = 5;
 
-        static constexpr double horizontalLimeMax = 6;
-        static constexpr double horizontalLimeMin = -6;
-        static constexpr double verticalLimeMax = 10;
+        static constexpr double horizontalLimeMax = 4;
+        static constexpr double horizontalLimeMin = -4;
+        static constexpr double verticalLimeMax = 6;
         static constexpr double verticalLimeMin = 0;
 
         static constexpr double shooterP = 15e-5;
