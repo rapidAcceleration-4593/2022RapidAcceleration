@@ -45,14 +45,14 @@ class Constants
         // left p = .1058
         // these should all be doubles...
         // but need to test what happens when they are doubles, so Mat is not changing now
-        static const int leftP = (0.56937 + .1058)/2;
-        static const int leftI = 0;
-        static const int leftD = 0;
-        static const int leftFF = .000015;
+        static constexpr double leftP = .337585;
+        static constexpr double leftI = 0;
+        static constexpr double leftD = 0;
+        static constexpr double leftFF = .000015;
         
         // right p = .12146
-        static const int rightP = (0.56172 + .12146)/2;
-        static const int rightI = 0;
-        static const int rightD = 0;
-        static const int rightFF = .000015;
+        static constexpr double rightP = 0;
+        static constexpr double rightI = 0;
+        static constexpr double rightD = 0;
+        static constexpr double rightFF = 0;
 };

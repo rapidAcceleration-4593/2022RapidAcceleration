@@ -42,6 +42,13 @@ DriveTrain::~DriveTrain()
 
 void DriveTrain::drive(double a1, double a2)
 {
+    std::cout << m_FLMEncoder.GetVelocity() << std::endl;
+    frc::SmartDashboard::PutNumber("left side position", m_FLMEncoder.GetVelocity());
+    frc::SmartDashboard::PutNumber("right side position", m_FRMEncoder.GetVelocity());
+
+    //a2 = (a2 + .25)* -1;
+    a1 = double(m_FRMPID.SetReference(a1, rev::CANSparkMax::ControlType::kVelocity));
+
     m_diffDrive.ArcadeDrive(a1, a2);
 }
 

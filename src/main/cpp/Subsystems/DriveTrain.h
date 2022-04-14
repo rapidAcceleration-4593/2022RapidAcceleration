@@ -5,6 +5,7 @@
 #include "rev/CANSparkMax.h"
 #include "constants.h"
 #include <iostream>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 class DriveTrain {
 
@@ -18,7 +19,6 @@ class DriveTrain {
         rev::CANSparkMax m_RRM{Constants::RRM, rev::CANSparkMax::MotorType::kBrushless};
 
         frc::DifferentialDrive m_diffDrive{m_FLM, m_FRM};
-
 
         void drive(double a1, double a2);
 
