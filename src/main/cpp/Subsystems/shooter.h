@@ -43,7 +43,7 @@ class shooter {
         frc::DoubleSolenoid m_leftIntakePneumatics {Constants::PH, frc::PneumaticsModuleType::REVPH,
                                                     Constants::intakeForwardLeft, Constants::intakeBackwardLeft};
 
-        // frc::DigitalInput m_meterSwitch {0};
+        frc::DigitalInput m_meterSwitch {0};
 
         VictorSPX m_meterRight{Constants::meterMotorRight};
         VictorSPX m_meterLeft{Constants::meterMotorLeft};

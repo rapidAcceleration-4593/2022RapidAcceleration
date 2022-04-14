@@ -286,7 +286,7 @@ void Robot::TeleopPeriodic() {
 
 
   // AUX CONTROLLER STUFFS
-   if (m_auxController.GetLeftTriggerAxis()){
+   if (m_auxController.GetBButton()){
     m_shooter.meterWheelsLeftRight(-.118,-.254);
     m_shooter.bigWheel(.35);
     manualOverride = true;
@@ -294,15 +294,15 @@ void Robot::TeleopPeriodic() {
 
 
   if (m_auxController.GetAButton()){
-    m_shooter.shoot(2000);
+    m_shooter.shoot(1778);
     shooting = true;
     // m_driveTrain.brakeMode();
   }
   else if (m_auxController.GetYButton()) {
     m_shooter.shoot(-100);
   }
-  else if (m_auxController.GetBButton()){
-    m_shooter.intakeSpinny(.65, .20);
+  else if (m_auxController.GetLeftTriggerAxis()){
+    m_shooter.intakeSpinny(.65, .5);
   }
   else if (m_auxController.GetXButton()){
     m_shooter.intakeSpinny(-.876, -.254);
@@ -316,11 +316,11 @@ void Robot::TeleopPeriodic() {
   }
 
   if (m_auxController.GetRightBumper()){
-    m_shooter.intakePneumaticIn();
+    m_shooter.intakePneumaticOut();
   }
 
   if (m_auxController.GetLeftBumper()){
-    m_shooter.intakePneumaticOut();
+    m_shooter.intakePneumaticIn();
   }
 
   manualOverride = false;

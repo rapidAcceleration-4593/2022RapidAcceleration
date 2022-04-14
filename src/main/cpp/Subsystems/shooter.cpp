@@ -35,7 +35,7 @@ void shooter::shoot(double shooterSpeed){
     else{
         m_rightShooterPID.SetReference(shooterSpeed, rev::CANSparkMax::ControlType::kVelocity);
         m_leftShooterPID.SetReference(-shooterSpeed, rev::CANSparkMax::ControlType::kVelocity);
-        if(abs(m_leftShooterEncoder.GetVelocity()) > shooterSpeed - 100 && shooterSpeed > 1) // janky fix for reverse shooter button
+        if(abs(m_leftShooterEncoder.GetVelocity()) > shooterSpeed - 50 && shooterSpeed > 1) // janky fix for reverse shooter button
         {
             m_bigWheel.Set(-.75); 
             m_meterLeft.Set(ControlMode::PercentOutput, -.254);
@@ -60,6 +60,8 @@ void shooter::intakeSpinny(double speed, double meterSpeed){
 
     if(checkPressed() == true){
         m_bigWheel.Set(0);      
+        m_meterLeft.Set(ControlMode::PercentOutput, 0);
+        m_meterRight.Set(ControlMode::PercentOutput, 0);
     }
     else{ 
         m_bigWheel.Set(-meterSpeed);
@@ -74,8 +76,7 @@ void shooter::bigWheel(double speed){
 
 bool shooter::checkPressed(){
     // std::cout << !m_meterSwitch.Get() << std::endl; 
-    // return !m_meterSwitch.Get(); 
-    return false;  
+    return !m_meterSwitch.Get();   
 }
 
 void shooter::meterWheelsLeftRight(double leftspeed,double rightspeed){
