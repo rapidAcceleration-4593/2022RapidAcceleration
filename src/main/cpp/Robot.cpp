@@ -57,11 +57,15 @@ bool shooting = false; // probably unneeded
 
 bool manualOverride = false;
 
+double setpoint = 0;
+double limit = .75;
+double delta;
+
 time_t startAutoTime;
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
-  m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
+  //m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   m_chooser.AddOption(kAutoNameNoDrive, kAutoNameNoDrive);
   m_chooser.AddOption(kAutoNameTwoBall, kAutoNameTwoBall);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
@@ -114,16 +118,16 @@ void Robot::AutonomousPeriodic() {
     // THIS IS THE KINDA BAD / TURNING AUTO
 
     if (time(0) - startAutoTime < 4){
-    m_shooter.shoot(2000);
+    m_shooter.shoot(1750);
     }
 
-    if(abs(m_driveTrain.getAverageEncoder()) < 32 && time(0) - startAutoTime > 4)
+    if(abs(m_driveTrain.getAverageEncoder()) < 55 && time(0) - startAutoTime > 4)
     {
-      m_driveTrain.tankDrive(.4593, .6);
+      m_driveTrain.drive(.4593,0);
       m_shooter.shoot(0);
       hasDroveBack = true;
     }
-    else if(abs(m_driveTrain.getAverageEncoder() > 30))
+    else if(abs(m_driveTrain.getAverageEncoder() > 55))
     {
       m_driveTrain.drive(0, 0);
       m_shooter.shoot(0);
@@ -138,7 +142,7 @@ void Robot::AutonomousPeriodic() {
   else if (m_autoSelected == kAutoNameNoDrive){
 
     if (time(0) - startAutoTime < 5){
-      m_shooter.shoot(2500);
+      m_shooter.shoot(2000);
     }
     else {
       m_shooter.intakeSpinny(0, 0);
@@ -157,37 +161,44 @@ void Robot::AutonomousPeriodic() {
     m_shooter.intakeSpinny(.6, .254);
     m_driveTrain.drive(-.4593,-.01);
    }
-    else if (abs(m_driveTrain.getRightEncoderValue()) < 61){
+    else if (abs(m_driveTrain.getRightEncoderValue()) < 59.5){
         m_driveTrain.drive(0, .5);
         slurpedBall = true;
+        //m_shooter.intakePneumaticIn();
     }
     else if (!m_limelight.inRange() && slurpedBall){
         m_driveTrain.drive(-.45,0);
+        m_shooter.intakePneumaticIn();
+        m_shooter.intakeSpinny(0,0);
     }
     // else if (m_limelight.inRange()){
     //     //m_shooter.shoot(.45);
     //     m_driveTrain.drive(0,0);
 
-    else if (time(0) - startAutoTime < 8){
-          m_shooter.shoot(2000);
-          //m_driveTrain.drive(0,0);
+    // else if (time(0) - startAutoTime < 12.5){
+    //       //m_shooter.shoot(1750);
+    //       m_shooter.intakePneumaticIn();
+    //       //m_driveTrain.drive(0,0);
 
-        // else if (time(0) - startAutoTime < 15 && time(0) - startAutoTime > 7)
-        // {
-        //   m_shooter.meterWheelsLeftRight(-.4593,-.4539);
-        //   // m_shooter.intakeSpinny(.930, .254);
-        //   m_shooter.bigWheel(.3);
-        //   m_shooter.shoot(.5);
-        //   m_driveTrain.drive(0,0);
+    //     // else if (time(0) - startAutoTime < 15 && time(0) - startAutoTime > 7)
+    //     // {
+    //     //   m_shooter.meterWheelsLeftRight(-.4593,-.4539);
+    //     //   // m_shooter.intakeSpinny(.930, .254);
+    //     //   m_shooter.bigWheel(.3);
+    //     //   m_shooter.shoot(.5);
+    //     //   m_driveTrain.drive(0,0);
 
-        // }
-
+    //     // }
+    if (time(0) - startAutoTime < 12.5 && time(0) - startAutoTime > 11){
+      m_driveTrain.tankDrive(0,-.4);
     }
-    if (time(0) - startAutoTime < 20 && time(0) - startAutoTime > 8){
-      m_driveTrain.drive(0,0);
-      m_shooter.bigWheel(.3);
-      m_shooter.shoot(2000);
-      m_shooter.intakePneumaticIn();
+    // }
+    if (time(0) - startAutoTime < 20 && time(0) - startAutoTime > 12.5){
+      //m_driveTrain.tankDrive(0,-.4);
+      //m_shooter.bigWheel(.3);
+      m_shooter.shoot(1750);
+      //m_shooter.intakeSpinny(.9,0);
+     // m_shooter.intakePneumaticIn();
     }
     // else if (sendThatBall = true){
     //   m_driveTrain.drive(0,0);
@@ -218,16 +229,16 @@ void Robot::AutonomousPeriodic() {
     // THIS IS A GOOD ONE
 
     if (time(0) - startAutoTime < 4){
-      m_shooter.shoot(1100);
+      m_shooter.shoot(1750);
     }
 
-    if(abs(m_driveTrain.getAverageEncoder()) < 50 && time(0) - startAutoTime > 4)
+    if(abs(m_driveTrain.getAverageEncoder()) < 60 && time(0) - startAutoTime > 4)
     {
       m_driveTrain.drive(.5172, 0);
-      m_shooter.shoot(0);
+      m_shooter.shoot(1750);
       hasDroveBack = true;
     }
-    else if(abs(m_driveTrain.getAverageEncoder() > 50))
+    else if(abs(m_driveTrain.getAverageEncoder() > 60))
     {
       m_driveTrain.drive(0, 0);
       m_shooter.shoot(0);
@@ -238,6 +249,7 @@ void Robot::AutonomousPeriodic() {
 
 void Robot::TeleopInit() {
   m_driveTrain.coastMode();
+  
 }
 
 void Robot::TeleopPeriodic() {
@@ -245,7 +257,21 @@ void Robot::TeleopPeriodic() {
   // limelight stuff
   frc::SmartDashboard::PutBoolean("lined up", m_limelight.inRange());
 
-  m_driveTrain.drive(m_driverController.GetLeftY(), - m_driverController.GetRightX());
+  if (abs(m_driverController.GetLeftY()) < .1) {
+    setpoint = 0;
+  }
+  delta = m_driverController.GetLeftY() * limit;
+  setpoint = setpoint + delta;
+
+  if(setpoint > 1){
+    setpoint = 1;
+  }
+
+  else if (setpoint < -1){
+    setpoint = -1;
+  }
+
+  m_driveTrain.drive(setpoint, - m_driverController.GetRightX());
 
   if(m_driverController.GetRightBumper()){
     m_climber.moveStatic(.973);
