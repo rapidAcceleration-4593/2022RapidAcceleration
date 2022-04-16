@@ -37,9 +37,7 @@
 
 
 frc::XboxController m_driverController{0};
-frc::XboxController m_auxController{1};
-
-frc::SlewRateLimiter<units::volts> m_driveLimiter{.5_V / 1_s}; // currently unused... 
+frc::XboxController m_auxController{1}; 
 
 DriveTrain m_driveTrain;
 shooter m_shooter;
@@ -56,10 +54,6 @@ bool slurpedBall = false;
 bool shooting = false; // probably unneeded
 
 bool manualOverride = false;
-
-double setpoint = 0;
-double limit = .75;
-double delta;
 
 time_t startAutoTime;
 
@@ -257,21 +251,7 @@ void Robot::TeleopPeriodic() {
   // limelight stuff
   frc::SmartDashboard::PutBoolean("lined up", m_limelight.inRange());
 
-  if (abs(m_driverController.GetLeftY()) < .1) {
-    setpoint = 0;
-  }
-  delta = m_driverController.GetLeftY() * limit;
-  setpoint = setpoint + delta;
-
-  if(setpoint > 1){
-    setpoint = 1;
-  }
-
-  else if (setpoint < -1){
-    setpoint = -1;
-  }
-
-  m_driveTrain.drive(setpoint, - m_driverController.GetRightX());
+  m_driveTrain.drive(m_driverController.GetLeftY(), - m_driverController.GetRightX());
 
   if(m_driverController.GetRightBumper()){
     m_climber.moveStatic(.973);

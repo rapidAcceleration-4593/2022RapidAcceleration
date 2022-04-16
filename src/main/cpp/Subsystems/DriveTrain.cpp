@@ -32,10 +32,10 @@ DriveTrain::DriveTrain()
     m_RRMPID.SetD(Constants::rightD);        
     m_RRMPID.SetFF(Constants::rightFF);
 
-    // m_FLM.SetOpenLoopRampRate(100);
-    // m_FRM.SetOpenLoopRampRate(100);
-    // m_RRM.SetOpenLoopRampRate(100);
-    // m_RLM.SetOpenLoopRampRate(100);
+    // m_FLM.SetOpenLoopRampRate(5);
+    // m_FRM.SetOpenLoopRampRate(5);
+    // m_RRM.SetOpenLoopRampRate(5);
+    // m_RLM.SetOpenLoopRampRate(5);
 
     m_diffDrive.SetDeadband(.15);
 }
@@ -47,9 +47,9 @@ DriveTrain::~DriveTrain()
 
 void DriveTrain::drive(double a1, double a2)
 {
-    std::cout << m_FLMEncoder.GetVelocity() << std::endl;
-    frc::SmartDashboard::PutNumber("left side position", m_FLMEncoder.GetVelocity());
-    frc::SmartDashboard::PutNumber("right side position", m_FRMEncoder.GetVelocity());
+    // std::cout << m_FLMEncoder.GetVelocity() << std::endl;
+    frc::SmartDashboard::PutNumber("left side position derivative", m_FLMEncoder.GetVelocity());
+    frc::SmartDashboard::PutNumber("right side position derivative", m_FRMEncoder.GetVelocity());
 
    // std::cout << "ramprate" + m_FLM.GetClosedLoopRampRate(); << std::endl;
 
